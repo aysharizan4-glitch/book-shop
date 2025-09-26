@@ -1,27 +1,46 @@
 // ================= Supabase Setup =================
-const SUPABASE_URL = "https://mjkixzefsmdusxtutoif.supabase.co";  // replace with your project URL
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1qa2l4emVmc21kdXN4dHV0b2lmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg5MTk2NzksImV4cCI6MjA3NDQ5NTY3OX0.kaMS_NQ7p9xnCV252aghbXk4esazxxTyuGTLBePTHTo";              // replace with your anon key
+const SUPABASE_URL = "https://mjkixzefsmdusxtutoif.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1qa2l4emVmc21kdXN4dHV0b2lmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg5MTk2NzksImV4cCI6MjA3NDQ5NTY3OX0.kaMS_NQ7p9xnCV252aghbXk4esazxxTyuGTLBePTHTo";
 const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+// ================= Admin Panel Toggle =================
+document.addEventListener("DOMContentLoaded", () => {
+  const adminBtn = document.getElementById('adminBtn');
+  const adminPanel = document.querySelector('.form-section');
+  const closeAdminBtn = document.getElementById('closeAdminBtn');
 
-// ================= Admin Panel Toggle ================= 
-const adminBtn = document.getElementById('adminBtn');
-const adminPanel = document.querySelector('.form-section');
-const closeAdminBtn = document.getElementById('closeAdminBtn');
+  if (!adminBtn || !adminPanel || !closeAdminBtn) return;
 
-adminBtn.addEventListener('click', () => {
-  const password = prompt("Enter Admin Password:");
-  if (password === 'admin123') { // Change your password here
-    adminPanel.style.display = 'block';
-    adminPanel.scrollIntoView({ behavior: "smooth" });
-  } else {
-    alert("Incorrect password!");
+  adminBtn.addEventListener('click', () => {
+    const password = prompt("Enter Admin Password:");
+    if (password === 'admin123') {
+      adminPanel.style.display = 'block';
+      adminPanel.scrollIntoView({ behavior: "smooth" });
+    } else {
+      alert("Incorrect password!");
+    }
+  });
+
+  closeAdminBtn.addEventListener('click', () => {
+    adminPanel.style.display = 'none';
+  });
+
+  // Load products from Supabase on page load
+  loadProductsFromSupabase();
+});
+
+// ================= Load Products Function =================
+async function loadProductsFromSupabase() {
+  try {
+    const { data, error } = await supabase.from('products').select('*').order('created_at', { ascending: false });
+    if (error) throw error;
+    products = data;
+    renderProducts();
+  } catch (err) {
+    console.error("Failed to fetch products:", err.message);
   }
-});
+}
 
-closeAdminBtn.addEventListener('click', () => {
-  adminPanel.style.display = 'none';
-});
 
 // ================= Product System =================
 let products = [];
