@@ -5,6 +5,7 @@ const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 
 // ================= Admin Panel Toggle ================= 
+document.addEventListener("DOMContentLoaded", () => {
 const adminBtn = document.getElementById('adminBtn');
 const adminPanel = document.querySelector('.form-section');
 const closeAdminBtn = document.getElementById('closeAdminBtn');
