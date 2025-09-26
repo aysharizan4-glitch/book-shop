@@ -3,6 +3,7 @@ const SUPABASE_URL = "https://mjkixzefsmdusxtutoif.supabase.co";  // replace wit
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1qa2l4emVmc21kdXN4dHV0b2lmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg5MTk2NzksImV4cCI6MjA3NDQ5NTY3OX0.kaMS_NQ7p9xnCV252aghbXk4esazxxTyuGTLBePTHTo";              // replace with your anon key
 const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+
 // ================= Admin Panel Toggle ================= 
 const adminBtn = document.getElementById('adminBtn');
 const adminPanel = document.querySelector('.form-section');
@@ -56,7 +57,6 @@ closeCartBtn.addEventListener('click', () => {
   cartSection.style.display = 'none';
 });
 
-// Render Cart items + Total
 function renderCart() {
   cartItemsEl.innerHTML = '';
   let total = 0;
@@ -94,7 +94,6 @@ function renderCart() {
   });
 }
 
-// Checkout button → WhatsApp
 checkoutBtn.addEventListener('click', () => {
   if (cart.length === 0) {
     alert("Your cart is empty!");
@@ -114,54 +113,6 @@ checkoutBtn.addEventListener('click', () => {
   const whatsappURL = `https://wa.me/94788878600?text=${message}`;
   window.open(whatsappURL, '_blank');
 });
-
-// ================= Supabase Product Functions =================
-
-// Load products from Supabase
-async function loadProducts() {
-  try {
-    const { data, error } = await supabase
-      .from('products')
-      .select('*')
-      .order('id', { ascending: true });
-
-    if (error) throw error;
-
-    products = data || [];
-    renderProducts();
-  } catch (err) {
-    console.error("Error loading products:", err.message);
-  }
-}
-
-// Save product to Supabase
-async function saveProductToSupabase(product) {
-  try {
-    const { data, error } = await supabase
-      .from('products')
-      .insert([product]);
-
-    if (error) throw error;
-    loadProducts();
-  } catch (err) {
-    console.error("Error saving product:", err.message);
-  }
-}
-
-// Delete product from Supabase
-async function deleteProductFromSupabase(id) {
-  try {
-    const { error } = await supabase
-      .from('products')
-      .delete()
-      .eq('id', id);
-
-    if (error) throw error;
-    loadProducts();
-  } catch (err) {
-    console.error("Error deleting product:", err.message);
-  }
-}
 
 // ================= Render Products =================
 function renderProducts() {
@@ -209,8 +160,19 @@ function renderProducts() {
   });
 }
 
+// ================= Load Products from Supabase =================
+async function loadProductsFromSupabase() {
+  const { data, error } = await supabase.from('products').select('*');
+  if (!error) {
+    products = data;
+    renderProducts();
+  } else {
+    console.error("Failed to fetch products:", error.message);
+  }
+}
+
 // ================= Add / Edit Product =================
-productFormEl.addEventListener('submit', (e) => {
+productFormEl.addEventListener('submit', async (e) => {
   e.preventDefault();
 
   const name = document.getElementById('productName').value.trim();
@@ -221,39 +183,51 @@ productFormEl.addEventListener('submit', (e) => {
   const featured = document.getElementById('featured').checked;
   const imageFile = document.getElementById('productImage').files[0];
 
+  let imageUrl = "https://via.placeholder.com/150?text=No+Image";
+
   if (imageFile) {
-    const reader = new FileReader();
-    reader.onload = function(event) {
-      const image = event.target.result;
-      const product = { name, price, category, description, inStock, featured, image };
-      saveProductToSupabase(product); // save to Supabase
-      productFormEl.reset();
-    };
-    reader.readAsDataURL(imageFile);
-  } else {
-    const image = "https://via.placeholder.com/150?text=No+Image";
-    const product = { name, price, category, description, inStock, featured, image };
-    saveProductToSupabase(product); // save to Supabase
+    const fileExt = imageFile.name.split('.').pop();
+    const fileName = `${Date.now()}.${fileExt}`;
+    const { error: uploadError } = await supabase.storage
+      .from('products')
+      .upload(fileName, imageFile);
+
+    if (!uploadError) {
+      const { publicUrl } = supabase.storage.from('products').getPublicUrl(fileName);
+      imageUrl = publicUrl;
+    } else {
+      console.error("Image upload failed:", uploadError.message);
+    }
+  }
+
+  const { error: insertError } = await supabase
+    .from('products')
+    .insert([{ name, price, category, description, inStock, featured, image: imageUrl }]);
+
+  if (!insertError) {
+    alert("✅ Product added successfully!");
+    loadProductsFromSupabase();
     productFormEl.reset();
+  } else {
+    console.error("Product insert failed:", insertError.message);
   }
 });
 
 // ================= Delete / Edit Product =================
 adminProductListEl.addEventListener('click', (e) => {
   const index = e.target.dataset.index;
-  const product = products[index];
-
   if (e.target.classList.contains('delete-btn')) {
-    deleteProductFromSupabase(product.id);
+    const productId = products[index].id;
+    supabase.from('products').delete().eq('id', productId).then(() => loadProductsFromSupabase());
   }
   if (e.target.classList.contains('edit-btn')) {
+    const product = products[index];
     document.getElementById('productName').value = product.name;
     document.getElementById('productPrice').value = product.price;
     document.getElementById('productCategory').value = product.category;
     document.getElementById('productDescription').value = product.description;
     document.getElementById('inStock').checked = product.inStock;
     document.getElementById('featured').checked = product.featured;
-    deleteProductFromSupabase(product.id);
   }
 });
 
@@ -273,5 +247,5 @@ productListEl.addEventListener('click', (e) => {
   }
 });
 
-// ================= Initial Load =================
-loadProducts();
+// ================= Load products on page load =================
+loadProductsFromSupabase();
