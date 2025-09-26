@@ -1,3 +1,8 @@
+// ================= Supabase Setup =================
+const SUPABASE_URL = "https://mjkixzefsmdusxtutoif.supabase.co";  // replace with your project URL
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1qa2l4emVmc21kdXN4dHV0b2lmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg5MTk2NzksImV4cCI6MjA3NDQ5NTY3OX0.kaMS_NQ7p9xnCV252aghbXk4esazxxTyuGTLBePTHTo";              // replace with your anon key
+const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
 // ================= Admin Panel Toggle ================= 
 const adminBtn = document.getElementById('adminBtn');
 const adminPanel = document.querySelector('.form-section');
@@ -27,26 +32,13 @@ const adminProductListEl = document.querySelector('.admin-product-list');
 const productListEl = document.querySelector('.product-list');
 const cartIcon = document.querySelector('.cart');
 
-// ================= Local Storage =================
-function saveProducts() {
-  localStorage.setItem("products", JSON.stringify(products));
-}
-
-function loadProducts() {
-  const saved = localStorage.getItem("products");
-  if (saved) {
-    products = JSON.parse(saved);
-    renderProducts();
-  }
-}
-loadProducts();
-
 // ================= Cart System =================
 function updateCartCount() {
   if (cartIcon) {
     cartIcon.textContent = "🛒 " + cart.length;
   }
 }
+
 // ================= Cart Checkout =================
 const cartSection = document.getElementById('cartSection');
 const cartItemsEl = document.getElementById('cartItems');
@@ -54,14 +46,12 @@ const cartTotalEl = document.getElementById('cartTotal');
 const checkoutBtn = document.getElementById('checkoutBtn');
 const closeCartBtn = document.getElementById('closeCartBtn');
 
-// Open Cart when click on cart icon
 cartIcon.addEventListener('click', () => {
   renderCart();
   cartSection.style.display = 'block';
   cartSection.scrollIntoView({ behavior: "smooth" });
 });
 
-// Close cart
 closeCartBtn.addEventListener('click', () => {
   cartSection.style.display = 'none';
 });
@@ -92,16 +82,14 @@ function renderCart() {
     });
   }
 
-  // update total live
   cartTotalEl.textContent = "Total: LKR " + total.toFixed(2);
 
-  // attach remove button events
   document.querySelectorAll('.removeCartBtn').forEach(btn => {
     btn.addEventListener('click', (e) => {
       const i = e.target.dataset.index;
-      cart.splice(i, 1);        // remove item from array
-      updateCartCount();        // update badge
-      renderCart();             // refresh cart list + total instantly
+      cart.splice(i, 1);
+      updateCartCount();
+      renderCart();
     });
   });
 }
@@ -127,6 +115,53 @@ checkoutBtn.addEventListener('click', () => {
   window.open(whatsappURL, '_blank');
 });
 
+// ================= Supabase Product Functions =================
+
+// Load products from Supabase
+async function loadProducts() {
+  try {
+    const { data, error } = await supabase
+      .from('products')
+      .select('*')
+      .order('id', { ascending: true });
+
+    if (error) throw error;
+
+    products = data || [];
+    renderProducts();
+  } catch (err) {
+    console.error("Error loading products:", err.message);
+  }
+}
+
+// Save product to Supabase
+async function saveProductToSupabase(product) {
+  try {
+    const { data, error } = await supabase
+      .from('products')
+      .insert([product]);
+
+    if (error) throw error;
+    loadProducts();
+  } catch (err) {
+    console.error("Error saving product:", err.message);
+  }
+}
+
+// Delete product from Supabase
+async function deleteProductFromSupabase(id) {
+  try {
+    const { error } = await supabase
+      .from('products')
+      .delete()
+      .eq('id', id);
+
+    if (error) throw error;
+    loadProducts();
+  } catch (err) {
+    console.error("Error deleting product:", err.message);
+  }
+}
 
 // ================= Render Products =================
 function renderProducts() {
@@ -155,7 +190,7 @@ function renderProducts() {
   products.forEach((product, index) => {
     const productCard = document.createElement('div');
     productCard.classList.add('feature');
-    productCard.style.flex = "1 1 calc(50% - 20px)"; // 2 by 2 in row
+    productCard.style.flex = "1 1 calc(50% - 20px)";
     productCard.style.boxSizing = "border-box";
 
     productCard.innerHTML = `
@@ -172,8 +207,6 @@ function renderProducts() {
     `;
     productListEl.appendChild(productCard);
   });
-
-  saveProducts();
 }
 
 // ================= Add / Edit Product =================
@@ -193,16 +226,14 @@ productFormEl.addEventListener('submit', (e) => {
     reader.onload = function(event) {
       const image = event.target.result;
       const product = { name, price, category, description, inStock, featured, image };
-      products.push(product);
-      renderProducts();
+      saveProductToSupabase(product); // save to Supabase
       productFormEl.reset();
     };
     reader.readAsDataURL(imageFile);
   } else {
     const image = "https://via.placeholder.com/150?text=No+Image";
     const product = { name, price, category, description, inStock, featured, image };
-    products.push(product);
-    renderProducts();
+    saveProductToSupabase(product); // save to Supabase
     productFormEl.reset();
   }
 });
@@ -210,20 +241,19 @@ productFormEl.addEventListener('submit', (e) => {
 // ================= Delete / Edit Product =================
 adminProductListEl.addEventListener('click', (e) => {
   const index = e.target.dataset.index;
+  const product = products[index];
+
   if (e.target.classList.contains('delete-btn')) {
-    products.splice(index, 1);
-    renderProducts();
+    deleteProductFromSupabase(product.id);
   }
   if (e.target.classList.contains('edit-btn')) {
-    const product = products[index];
     document.getElementById('productName').value = product.name;
     document.getElementById('productPrice').value = product.price;
     document.getElementById('productCategory').value = product.category;
     document.getElementById('productDescription').value = product.description;
     document.getElementById('inStock').checked = product.inStock;
     document.getElementById('featured').checked = product.featured;
-    products.splice(index, 1);
-    renderProducts();
+    deleteProductFromSupabase(product.id);
   }
 });
 
@@ -242,3 +272,6 @@ productListEl.addEventListener('click', (e) => {
     window.open(whatsappURL, '_blank');
   }
 });
+
+// ================= Initial Load =================
+loadProducts();
