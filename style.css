@@ -1,3 +1,4 @@
+Rizan Mohamed, [27/09/2025 12:49]
 /* =====================
    Global Styles
 ===================== */
@@ -220,6 +221,7 @@ color: hsl(242, 98%, 18%);
   box-shadow: 0 4px 8px rgba(0,0,0,0.05);
 }
 
+Rizan Mohamed, [27/09/2025 12:49]
 .contact-form {
   margin-top: 30px;
   background: linear-gradient(to right, lab(48.53% 77.07 -6), hsl(319, 68%, 85%));
@@ -292,42 +294,7 @@ footer {
   font-size: 0.85rem;
 }
 
-/* =====================
-   Bottom Nav (Mobile)
-===================== */
-.bottom-nav {
-  display: flex;
-  justify-content: space-around;
-  background: linear-gradient(to right, lab(48.53% 77.07 -6), hsl(319, 68%, 85%));
-  border-top: 1px solid #ddd;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 10px 0;
-  z-index: 1000;
-}
 
-.bottom-nav .nav-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  font-size: 0.8rem;
-  color: hsl(252, 38%, 97%);
-}
-
-.bottom-nav i {
-  font-size: 1.3rem;
-  margin-bottom: 5px;
-  color: #ed099d;
-}
-
-/* Hide bottom nav in desktop */
-@media (min-width: 992px) {
-  .bottom-nav {
-    display: none;
-  }
-}
 /* =====================
    Header
 ===================== */
@@ -365,10 +332,61 @@ footer {
   color: #ea04a1;
 }
 
-/* Hide top nav in mobile */
-@media (max-width: 991px) {
-  .header nav {
+/* ===================== Bottom Mobile Nav ==================== */
+.bottom-nav {
+  display: none; /* hidden by default on desktop */
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: linear-gradient(to right, #000080, #ff00ff);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 8px 0;
+  z-index: 1000;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+}
+
+/* Each nav item */
+.bottom-nav .nav-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  text-decoration: none;
+  font-size: 0.85rem;
+  transition: transform 0.2s ease;
+  padding: 5px 0;
+}
+
+.bottom-nav .nav-item .icon {
+  font-size: 1.5rem;
+  margin-bottom: 2px;
+}
+
+.bottom-nav .nav-item .text {
+  font-size: 0.75rem;
+}
+
+/* Hover / Active effect */
+.bottom-nav .nav-item:hover,
+.bottom-nav .nav-item:active {
+  transform: scale(1.2);
+}
+
+/* Show only on mobile screens */
+@media (max-width: 768px) {
+  .bottom-nav {
+    display: flex;
+  }
+
+  /* Hide desktop nav */
+  header nav {
     display: none;
   }
 }
-
