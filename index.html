@@ -1,41 +1,25 @@
-<!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>AYSHLYNE Stationery</title>
-
-  
-  <!-- External CSS -->
+ <!-- External CSS -->
   <link rel="stylesheet" href="style.css" />
-
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 <body>
 
-  
-
-<section id="cartSection" style="display:none; padding:20px;">
-  <h2>🛒 Your Cart</h2>
-  <div id="cartItems"></div>
-  <h3 id="cartTotal"></h3>
-  <button id="checkoutBtn" style="padding:10px 15px;background:#28a745;color:#fff;border:none;border-radius:5px;cursor:pointer;">
-    Checkout
-  </button>
-  <button id="closeCartBtn" style="padding:10px 15px;background:#666;color:#fff;border:none;border-radius:5px;cursor:pointer;">
-    Close
-  </button>
-</section>
-  
 <!-- Header -->
   <header class="header">
     <div class="logo">
       <img src="aysh logo.jpg" alt="Logo">
     </div>
     <h1 class="title">AYSHLYNE</h1>
-
-    <nav>
+ <nav>
       <ul>
-        <li><a href="#home">Home</a></li>
+        <li><a href="#hero">Home</a></li>
         <li><a href="#product">Products</a></li>
         <li><a href="#aboutus">About Us</a></li>
         <li><a href="#contact">Contact</a></li>
@@ -43,11 +27,11 @@
     </nav>
     <div class="header-icons">
       <span class="cart">🛒</span>
-     
-  </header>
+     </header>
+
 <!-- ADMIN PANEL (only one copy) -->
   <section class="form-section" style="display:none;">
-    <button id="closeAdminBtn" class="btn" style="background-color:#666;margin-bottom:20px;">Close Admin Panel</button>
+    <button id="closeAdminBtn" class="btn">Close Admin Panel</button>
 
     <h2>Product Management</h2>
     <form id="productForm">
@@ -72,42 +56,49 @@
   </section>
 
 
-  <!-- Hero Section -->
-  <section class="hero" id="home">
-    <div class="hero-content">
-      <h1>WELCOME TO</h1>
-      <h2>Our Stationery Store</h2>
-      <p>Your One-Stop Shop For Notebooks, Pens, Art Supplies, And Everything in Cheap And Good. You Need To Stay Creative And Organized.</p>
-      <a href="#product" class="btn">Shop Now</a>
-      <div class="image">
-      <img src="hom image.jpg" alt="hom image.jpg"></div>
+  <!-- cart section -->
+<section id="cartSection" style="display:none; padding:20px;">
+  <h2>🛒 Your Cart</h2>
+  <div id="cartItems"></div>
+  <h3 id="cartTotal"></h3>
+  <button id="checkoutBtn" style="padding:10px 15px;background:#28a745;color:#fff;border:none;border-radius:5px;cursor:pointer;">
+    Checkout
+  </button>
+  <button id="closeCartBtn" style="padding:10px 15px;background:#fbf7f7;color:#0d0b0b;border:none;border-radius:5px;cursor:pointer;">
+    Close
+  </button>
+</section>
 
-      <!-- Features -->
-      <div class="features">
-        <div class="feature">
-          <i class="fa-solid fa-truck-fast"></i>
-          <h3>Fast Delivery</h3>
-          <p>Island-wide shipping</p>
-        </div>
-        <div class="feature">
-          <i class="fa-solid fa-shield-halved"></i>
-          <h3>Secure Shopping</h3>
-          <p>Safe & trusted</p>
-        </div>
-        <div class="feature">
-          <i class="fa-solid fa-headset"></i>
-          <h3>Quality Service</h3>
-          <p>24/7 support</p>
-        </div>
+
+   <!-- hero SECTION -->
+
+  <section id="hero" class="hero">
+    <div class="hero-content">
+      <h1 class="hero-title">AYSHLYNE Stationery</h1>
+      <p class="hero-tagline">✨ Stationery that inspires brilliance ✨</p>
+      <p class="hero-text">
+        Discover elegant notebooks, playful pens, and stylish desk essentials.  
+        At <strong>AYSHLYNE</strong>, we blend creativity and quality to make every idea shine.
+      </p>
+      <div class="hero-buttons">
+        <a href="#product" class="btn primary">Shop Now</a>
+        <a href="#product" class="btn secondary">Explore</a>
       </div>
     </div>
+    <div class="hero-image">
+      <img src="hom image.jpg" alt="AYSHLYNE Stationery Products">
+    </div>
+  </section>
 
-  
    <!-- PRODUCT SECTION -->
  <div> <section id="product" class="product-section">
     <h2>Our Products</h2>
 
-<div class="product-list"></div>
+<div class="product-list">
+  <p class="in-stock">In Stock</p>
+<p class="out-of-stock">Out of Stock</p>
+
+</div>
  
 
  <!-- ABOUT SECTION -->
@@ -209,7 +200,7 @@
 </footer>
 <!-- Mobile Bottom Nav -->
 <nav class="bottom-nav">
-  <a href="#home" class="nav-item">
+  <a href="#hero" class="nav-item">
     <span class="icon">🏠</span>
     <span class="text">Home</span>
   </a>
@@ -235,5 +226,5 @@
   
 <script src="script.js"></script>
 
-  </body>
+</body>
 
