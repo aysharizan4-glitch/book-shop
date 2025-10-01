@@ -117,40 +117,36 @@ async function renderAdminProducts() {
 renderAdminProducts();
 
 // ---------------- Add Product ----------------
-async function addProductHandler(e) {
-  e.preventDefault();
-  const name = document.getElementById("productName").value;
-  const price = document.getElementById("productPrice").value;
-  const category = document.getElementById("productCategory").value;
-  const description = document.getElementById("productDescription").value;
-  const inStock = document.getElementById("inStock").checked;
-  const featured = document.getElementById("featured").checked;
-  const imageFile = document.getElementById("productImage").files[0];
+  // ---------------- Add Product Handler ----------------
+  async function addProductHandler(e) {
+    e.preventDefault();
+    const name = document.getElementById('productName').value;
+    const price = document.getElementById('productPrice').value;
+    const category = document.getElementById('productCategory').value;
+    const description = document.getElementById('productDescription').value;
+    const inStock = document.getElementById('inStock').checked;
+    const featured = document.getElementById('featured').checked;
+    const imageFile = document.getElementById('productImage').files[0];
 
-  let imageUrl = "";
-  if (imageFile) {
-    const { error } = await supabase.storage
-      .from("product-images")
-      .upload(`public/${imageFile.name}`, imageFile, { upsert: true });
-    if (!error) {
-      imageUrl = `${SUPABASE_URL}/storage/v1/object/public/product-images/public/${imageFile.name}`;
+    let imageUrl = '';
+    if (imageFile) {
+      const { error } = await supabase.storage.from('product-images').upload(`public/${imageFile.name}`, imageFile, { upsert: true });
+      if (!error) {
+        imageUrl = `${SUPABASE_URL}/storage/v1/object/public/product-images/${imageFile.name}`;
+      }
+    }
+
+    const { error } = await supabase.from('products').insert([{ name, price, category, description, inStock, featured, imageUrl }]);
+    if (error) alert('Error adding product');
+    else {
+      alert('Product added successfully');
+      productForm.reset();
+      renderAdminProducts();
+      renderProductSection();
     }
   }
 
-  const { error } = await supabase.from("products").insert([
-    { name, price, category, description, inStock, featured, imageUrl },
-  ]);
-
-  if (error) alert("Error adding product");
-  else {
-    alert("Product added successfully");
-    productForm.reset();
-    renderAdminProducts();
-    renderProductSection();
-  }
-}
-productForm.onsubmit = addProductHandler;
-
+  productForm.onsubmit = addProductHandler;
 // ---------------- Render Products ----------------
 async function renderProductSection() {
   const { data: products } = await supabase.from("products").select("*");
@@ -158,7 +154,7 @@ async function renderProductSection() {
 
   products.forEach((product) => {
     const card = document.createElement("div");
-    card.classList.add("product-card"); // style handled in CSS
+    card.classList.add("product-card");
 
     if (product.inStock) {
       card.classList.add("in-stock");
@@ -179,7 +175,6 @@ async function renderProductSection() {
     productList.appendChild(card);
   });
 }
-
 renderProductSection();
 
 // ---------------- Cart ----------------
@@ -190,7 +185,7 @@ const checkoutBtn = document.getElementById("checkoutBtn");
 const closeCartBtn = document.getElementById("closeCartBtn");
 const cartIcon = document.querySelector(".cart");
 
-// ✅ add cart count span if not exist
+// Add cart count span if not exist
 if (!document.querySelector(".cart-count")) {
   const span = document.createElement("span");
   span.className = "cart-count";
@@ -198,12 +193,12 @@ if (!document.querySelector(".cart-count")) {
   cartIcon.appendChild(span);
 }
 
-// ✅ Save cart to localStorage
+// Save cart to localStorage
 function saveCart() {
   localStorage.setItem("cart", JSON.stringify(cart));
 }
 
-// ✅ Load cart from localStorage on page load
+// Load cart from localStorage on page load
 window.addEventListener("load", () => {
   const saved = localStorage.getItem("cart");
   if (saved) {
@@ -230,7 +225,7 @@ function renderCart() {
   cartTotalEl.textContent = `Total: Rs. ${total.toFixed(2)}`;
   document.querySelector(".cart-count").textContent = cart.length;
 
-  saveCart(); // ✅ always save after rendering
+  saveCart();
 }
 
 function addToCart(product) {
@@ -251,69 +246,121 @@ cartIcon.addEventListener("click", () => {
   cartSection.scrollIntoView({ behavior: "smooth", block: "start" });
 });
 
-closeCartBtn.addEventListener(
-  "click",
-  () => (cartSection.style.display = "none")
-);
+closeCartBtn.addEventListener("click", () => (cartSection.style.display = "none"));
 
-// ---------------- WhatsApp Order ----------------
-async function sendWhatsAppOrder(products) {
-  if (!products.length) return alert("No products selected!");
-  const method = prompt(
-    "Select Payment Method:\n1 = Cash on Delivery\n2 = Bank Transfer"
-  );
+// ---------------- Checkout + WhatsApp ----------------
+const WHATSAPP_NUMBER = "94788878600";
 
-  let payment = "";
-  if (method === "1") payment = "Cash on Delivery";
-  else if (method === "2") payment = "Bank Transfer";
-  else return alert("Invalid selection");
+function openCheckoutForm(cartItems, total) {
+  const formOverlay = document.createElement("div");
+  formOverlay.classList.add("checkout-overlay");
 
-  let message = "Hello, I would like to order the following items:%0A";
-  let total = 0;
-  products.forEach((p) => {
-    total += parseFloat(p.price);
-    message += `- ${p.name} (Rs. ${parseFloat(p.price).toFixed(2)})%0A`;
-  });
-  message += `Total: Rs. ${total.toFixed(
-    2
-  )}%0APayment Method: ${payment}%0AThank you!`;
+  formOverlay.innerHTML = `
+    <div class="checkout-form">
+      <h2>Confirmation</h2>
+      <label>Name*</label>
+      <input type="text" id="custName" required>
+      <label>Address*</label>
+      <textarea id="custAddress" required></textarea>
+      <label>Contact Number*</label>
+      <input type="tel" id="custPhone" required>
+      <label>Email*</label>
+      <input type="email" id="custEmail" required>
+      <label>Payment Method*</label>
+      <div class="payment-options">
+        <label><input type="radio" name="payment" value="Cash on Delivery" checked> Cash on Delivery</label>
+        <label><input type="radio" name="payment" value="Bank Transfer"> Bank Transfer</label>
+      </div>
+      <button id="confirmOrderBtn">Confirm</button>
+      <button id="cancelOrderBtn" class="cancel">Cancel</button>
+    </div>
+  `;
 
-  window.open(`https://wa.me/+94788878600?text=${message}`, "_blank");
+  document.body.appendChild(formOverlay);
+
+  document.getElementById("cancelOrderBtn").onclick = () => formOverlay.remove();
+
+  document.getElementById("confirmOrderBtn").onclick = () => {
+    const name = document.getElementById("custName").value.trim();
+    const address = document.getElementById("custAddress").value.trim();
+    const phone = document.getElementById("custPhone").value.trim();
+    const email = document.getElementById("custEmail").value.trim();
+    const payment = document.querySelector("input[name='payment']:checked").value;
+
+    if (!name || !address || !phone || !email) {
+      alert("Please fill in all fields.");
+      return;
+    }
+
+    let itemsText = "";
+    cartItems.forEach(item => {
+      itemsText += `${item.qty}x ${item.name} - Rs.${parseFloat(item.price).toFixed(2)}\n`;
+    });
+
+    const message = `
+🛒 New Order - AYSHLYNE Stationery
+
+👤 Name: ${name}
+📍 Address: ${address}
+📞 Contact: ${phone}
+✉️ Email: ${email}
+💳 Payment: ${payment}
+
+Products:
+${itemsText}
+
+💰 Total: Rs.${total.toFixed(2)}
+    `;
+
+    const whatsappURL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+    window.open(whatsappURL, "_blank");
+
+    cart = [];
+    renderCart();
+    localStorage.removeItem("cart");
+    formOverlay.remove();
+  };
 }
 
-// Add to cart & order now
-document.addEventListener("click", (e) => {
-  if (e.target.classList.contains("add-to-cart-btn")) {
-    const card = e.target.closest(".product-card");
-    const product = {
-      name: card.querySelector("h3").textContent,
-      price: parseFloat(
-        card
-          .querySelector("p:nth-of-type(2)")
-          .textContent.replace("Price: Rs.", "")
-          .trim()
-      ),
-    };
-    addToCart(product);
+checkoutBtn.addEventListener("click", () => {
+  const cartItems = [];
+  document.querySelectorAll("#cartItems .cart-item, #cartItems div").forEach(itemEl => {
+    const name = itemEl.querySelector(".item-name")?.textContent || itemEl.querySelector("span")?.textContent.split(" (")[0];
+    const priceText = itemEl.querySelector(".item-price")?.textContent || itemEl.querySelector("span")?.textContent;
+    const price = parseFloat(priceText.replace(/[^\d.]/g, "")) || 0;
+    cartItems.push({ name, qty: 1, price });
+  });
+
+  const totalText = document.getElementById("cartTotal").textContent.replace(/[^\d.]/g, "");
+  const total = parseFloat(totalText) || 0;
+
+  if (cartItems.length === 0) {
+    alert("Your cart is empty.");
+    return;
   }
-  if (e.target.classList.contains("order-now-btn")) {
-    const card = e.target.closest(".product-card");
-    const product = {
-      name: card.querySelector("h3").textContent,
-      price: parseFloat(
-        card
-          .querySelector("p:nth-of-type(2)")
-          .textContent.replace("Price: Rs.", "")
-          .trim()
-      ),
-    };
-    sendWhatsAppOrder([product]);
-  }
+
+  openCheckoutForm(cartItems, total);
 });
 
-checkoutBtn.addEventListener("click", () => {
-  sendWhatsAppOrder(cart);
-  cart = [];
-  renderCart();
-  localStorage.removeItem("cart"); // ✅ clear after checkout
+// ---------------- Product Buttons ----------------
+document.addEventListener("DOMContentLoaded", () => {
+  document.addEventListener("click", (e) => {
+    if (e.target.classList.contains("add-to-cart-btn")) {
+      const card = e.target.closest(".product-card");
+      const product = {
+        name: card.querySelector("h3").textContent,
+        price: parseFloat(card.querySelector(".product-price").textContent.replace("Price: Rs.", "").trim()),
+      };
+      addToCart(product);
+    }
+
+    if (e.target.classList.contains("order-now-btn")) {
+      const card = e.target.closest(".product-card");
+      const product = {
+        name: card.querySelector("h3").textContent,
+        price: parseFloat(card.querySelector(".product-price").textContent.replace("Price: Rs.", "").trim()),
+      };
+      openCheckoutForm([product], product.price);
+    }
+  });
 });

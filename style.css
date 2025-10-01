@@ -45,7 +45,7 @@ body {
   font-size: 22px;
   font-weight: 700;
   letter-spacing: 1.5px;
-  background: linear-gradient(90deg, hsl(52, 98%, 49%), #310ff3, hwb(0 99% 1%));
+  background: linear-gradient(90deg, hsl(5, 98%, 49%), #0318fc, hwb(127 1% 3%));
   background-size: 200% auto;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -199,7 +199,7 @@ header nav a:hover::after {
 
 body {
   font-family: "Poppins", sans-serif;
-  background: linear-gradient(to right, blue, white);
+  background: linear-gradient(to right, rgb(238, 247, 100), white);
   color: #2a1f2f;
   line-height: 1.5;
   padding: 0;
@@ -213,13 +213,14 @@ body {
   text-align: center;
  padding: 50px 15px;
   align-items: center;
+
 }
 
 .hero-title {
   font-family: "Playfair Display", serif;
   font-size: 2rem;
   margin-bottom: 10px;
-   background: linear-gradient(90deg, hsl(0, 95%, 49%), hwb(124 4% 45%), hwb(0 4% 96%));
+   background: linear-gradient(90deg, hsl(243, 95%, 49%), hwb(124 1% 0%), hwb(0 1% 1%));
   background-size: 200% auto;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -229,7 +230,7 @@ body {
 .hero-tagline {
   font-size: 1rem;
   font-weight: 600;
-  background: linear-gradient(90deg, white,rgb(223, 4, 4));
+  background: linear-gradient(90deg, rgb(32, 6, 232),rgb(223, 4, 4));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   margin-bottom: 20px;
@@ -314,155 +315,20 @@ body {
     margin-top: 0;
   }
 }
+
 /* ============ Product Section ============ */
-/* ===================== Product Section ===================== */
-.product-section {
-  padding: 60px 20px;
-  background: #f4f4f9;
-  text-align: center;
-}
-
-.product-section h2 {
-  font-size: 28px;
-  font-weight: 700;
-  color: #222;
-  margin-bottom: 40px;
-}
-
-/* Product Grid */
-.product-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 25px;
-  justify-items: center;
-}
-
-/* Product Card */
-.product-card {
-  background: #fff;
-  border-radius: 16px;
-  padding: 20px;
-  width: 100%;
-  max-width: 260px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.product-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
-}
-
-/* Product Image */
-.product-card img {
-  width: 150px;
-  height: 150px;
-  object-fit: cover;
-  border-radius: 12px;
-  margin-bottom: 12px;
-}
-
-/* Product Info */
-.product-card h3 {
-  font-size: 18px;
-  font-weight: 600;
-  color: #f30606;
-  margin-bottom: 6px;
-}
-
-.product-card p {
-  font-size: 14px;
-  color: #18045a;
-  margin-bottom: 10px;
-}
-
-/* Price */
- .price {
-  font-size: 16px;
-  font-weight: 700;
-  color: #fff;
-  background: #ff6b6b;
-  padding: 5px 10px;
-  border-radius: 6px;
-  margin-bottom: 12px;
-  display: inline-block;
-}
-
-/* Stock Status */
-.product-card .in-stock {
-  color: #28a745;
-  font-weight: 600;
-  margin-bottom: 10px;
-}
-
-.product-card .out-of-stock {
-  color: #dc3545;
-  font-weight: 600;
-  margin-bottom: 10px;
-}
-
-/* Buttons */
-.product-card button {
-  padding: 10px 16px;
-  margin: 5px 4px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 500;
-  transition: 0.3s ease;
-}
-
-.product-card .add-to-cart {
-  background: #007bff;
-  color: #fff;
-}
-
-.product-card .add-to-cart:hover {
-  background: #0056b3;
-}
-
-.product-card .order-now {
-  background: #28a745;
-  color: #fff;
-}
-
-.product-card .order-now:hover {
-  background: #1e7e34;
-}
-
-/* Responsive Adjustments */
-@media (max-width: 992px) {
-  .product-list {
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  }
-}
-
-@media (max-width: 600px) {
-  .product-list {
-    grid-template-columns: 1fr;
-    gap: 20px;
-  }
-  .product-card img {
-    width: 140px;
-    height: 140px;
-  }
-}
-
-
 
 /* ============ About Section ============ */
 .about-section {
   padding: 60px 20px;
-   background: linear-gradient(to right, #f9f6f6,rgb(88, 49, 246));
+  background: #fafafa;
+  text-align: center;
+  background: linear-gradient(to right, rgb(238, 247, 100), white);
 }
 .about-section .section-title {
   text-align: center;
   margin-bottom: 20px;
+  
 }
 .features-grid {
   display: grid;
@@ -471,17 +337,19 @@ body {
   margin-top: 20px;
 }
 .feature {
-   background: linear-gradient(to right, rgb(84, 59, 248),rgb(247, 246, 243));
+  background: linear-gradient(to right, #fefff7, hsl(66, 88%, 68%));
   padding: 15px;
   border-radius: 10px;
   text-align: center;
   box-shadow: 0 3px 12px rgba(0,0,0,0.06);
 }
 
+
+
 /* ============ Contact Section ============ */
 .contact-section {
   padding: 60px 20px;
-   background: linear-gradient(to right, rgb(80, 71, 254),rgb(247, 246, 243));
+  background: linear-gradient(to right, #fdfdfb, rgb(238, 249, 81));
   text-align: center;
 }
 .contact-cards {
@@ -491,7 +359,7 @@ body {
   margin: 25px 0;
 }
 .contact-cards .card {
-   background: linear-gradient(to right, lab(97.18% -0.35 0.95),rgb(79, 50, 246));
+  background: linear-gradient(to right, rgb(238, 247, 100), white);
   padding: 18px;
   border-radius: 10px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
@@ -505,31 +373,11 @@ body {
   border-radius: 6px;
   text-decoration: none;
 }
-.contact-form {
-  max-width: 600px;
-  margin: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-.contact-form input,
-.contact-form textarea {
-  padding: 10px;
-  border: 1px solid hsl(243, 88%, 29%);
-  border-radius: 6px;
-}
-.contact-form button {
-  background: hwb(249 1% 46%);
-  color: #f9f7f7;
-  padding: 12px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-}
+
 
 /* ============ Footer ============ */
 footer {
-   background: linear-gradient(to right, rgb(245, 240, 240),rgb(71, 80, 249));
+  
   color: #0a0a0a;
   text-align: center;
   padding: 30px 20px;
@@ -542,6 +390,110 @@ footer .footer-bottom {
   margin-top: 20px;
   font-size: 14px;
 }
+.mail{  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.9rem;
+
+}
+
+.sbtn{
+   text-decoration: none;
+  padding: 5px 30px;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: 0.3s;
+  font-size: 0.75rem;
+  background: linear-gradient(to right, rgb(254, 2, 170),white);
+  color: hsl(0, 0%, 4%);
+}
+
+
+/* ============ Form ============ */
+
+.checkout-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.checkout-form {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 400px;
+  text-align: left;
+}
+
+.checkout-form h2 {
+  margin-bottom: 15px;
+  font-size: 1.4rem;
+  text-align: center;
+  color: #333;
+}
+
+.checkout-form label {
+  display: block;
+  margin: 8px 0 4px;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.checkout-form input,
+.checkout-form textarea {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.payment-options {
+  margin: 10px 0;
+}
+
+.payment-options label {
+  display: block;
+  margin: 4px 0;
+}
+
+.checkout-form button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 8px;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+#confirmOrderBtn {
+  background: #28a745;
+  color: #fff;
+}
+
+#confirmOrderBtn:hover {
+  background: #218838;
+}
+
+#cancelOrderBtn {
+  background: #dc3545;
+  color: #fff;
+}
+
+#cancelOrderBtn:hover {
+  background: #c82333;
+}
+
 
 /* ============ Bottom Nav (Mobile Only) ============ */
 .bottom-nav {
@@ -549,7 +501,7 @@ footer .footer-bottom {
   bottom: 0;
   left: 0;
   right: 0;
-  background: linear-gradient(to right, black,rgb(247, 246, 243));
+  background: linear-gradient(to top, black,rgb(248, 248, 53));
   display: flex;
   justify-content: space-around;
   padding: 10px 0;
