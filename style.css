@@ -205,6 +205,57 @@ body {
   padding: 0;
 }
 
+/* ---------- Admin Panel ---------- */
+.form-section {
+  display: none;
+  position: fixed;
+  top: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 95%;
+  max-width: 600px;
+  background: #fff;
+  padding: 20px;
+  z-index: 2000;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  overflow-y: auto;
+  max-height: 90vh;
+}
+
+.form-section h2, .form-section h3 {
+  margin-bottom: 10px;
+  color: #007bff;
+}
+
+.form-section .grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.form-section input, 
+.form-section textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.form-section button.btn {
+  padding: 10px 15px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.form-section button.btn:hover {
+  background-color: #0056b3;
+}
+
 /* ========== Hero Section ========== */
 .hero {
   display: flex;

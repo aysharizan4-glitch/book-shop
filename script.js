@@ -1,7 +1,6 @@
 // ---------------- Supabase setup ---------------- 
 const SUPABASE_URL = "https://avlwpnovjkxrogrfjeuj.supabase.co";
-const SUPABASE_ANON_KEY =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF2bHdwbm92amt4cm9ncmZqZXVqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTkwMDI2ODgsImV4cCI6MjA3NDU3ODY4OH0.cmDyPatRmI0EU6EkXygCmtFtXKXHhvk7ie60479Djew";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF2bHdwbm92amt4cm9ncmZqZXVqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTkwMDI2ODgsImV4cCI6MjA3NDU3ODY4OH0.cmDyPatRmI0EU6EkXygCmtFtXKXHhvk7ie60479Djew";
 
 // ✅ create client
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -11,7 +10,7 @@ const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 const adminBtn = document.getElementById("adminBtn");
 const formSection = document.querySelector(".form-section");
 const closeAdminBtn = document.getElementById("closeAdminBtn");
-const ADMIN_PASSWORD = "1234"; // Change this
+const ADMIN_PASSWORD = "1234";
 
 adminBtn.addEventListener("click", () => {
   const password = prompt("Enter Admin Password:");
@@ -33,7 +32,7 @@ const productList = document.querySelector(".product-list");
 const adminProductList = document.querySelector(".admin-product-list");
 let cart = [];
 
-// Render products in Admin Panel
+// ---------------- Render Admin Products ----------------
 async function renderAdminProducts() {
   const { data: products, error } = await supabase.from("products").select("*");
   if (error) return console.error(error);
@@ -46,7 +45,9 @@ async function renderAdminProducts() {
 
     div.innerHTML = `
       <div>
-        <strong>${product.name}</strong> | Rs. ${parseFloat(product.price).toFixed(2)} | ${product.category} <br>
+        <strong>${product.name}</strong> | Rs. ${parseFloat(
+      product.price
+    ).toFixed(2)} | ${product.category} <br>
         ${product.description || ""}
       </div>
       <div>
@@ -57,7 +58,7 @@ async function renderAdminProducts() {
     adminProductList.appendChild(div);
   });
 
-  // Edit product
+  // ---------------- Edit product ----------------
   document.querySelectorAll(".edit-btn").forEach((btn) => {
     btn.addEventListener("click", async () => {
       const productId = btn.dataset.id;
@@ -70,8 +71,9 @@ async function renderAdminProducts() {
       document.getElementById("productName").value = product.name;
       document.getElementById("productPrice").value = product.price;
       document.getElementById("productCategory").value = product.category;
-      document.getElementById("productDescription").value = product.description;
-      document.getElementById("inStock").checked = product.inStock;
+      document.getElementById("productDescription").value =
+        product.description;
+      document.getElementById("inStock").checked = product.in_stock;
       document.getElementById("featured").checked = product.featured;
 
       productForm.onsubmit = async (e) => {
@@ -81,13 +83,15 @@ async function renderAdminProducts() {
           price: document.getElementById("productPrice").value,
           category: document.getElementById("productCategory").value,
           description: document.getElementById("productDescription").value,
-          inStock: document.getElementById("inStock").checked,
+          in_stock: document.getElementById("inStock").checked,
           featured: document.getElementById("featured").checked,
         };
+
         const { error } = await supabase
           .from("products")
           .update(updated)
           .eq("id", productId);
+
         if (error) alert("Error updating product");
         else {
           alert("Product updated successfully");
@@ -100,7 +104,7 @@ async function renderAdminProducts() {
     });
   });
 
-  // Delete product
+  // ---------------- Delete product ----------------
   document.querySelectorAll(".delete-btn").forEach((btn) => {
     btn.addEventListener("click", async () => {
       if (confirm("Are you sure you want to delete this product?")) {
@@ -117,60 +121,77 @@ async function renderAdminProducts() {
 renderAdminProducts();
 
 // ---------------- Add Product ----------------
-  // ---------------- Add Product Handler ----------------
-  async function addProductHandler(e) {
-    e.preventDefault();
-    const name = document.getElementById('productName').value;
-    const price = document.getElementById('productPrice').value;
-    const category = document.getElementById('productCategory').value;
-    const description = document.getElementById('productDescription').value;
-    const inStock = document.getElementById('inStock').checked;
-    const featured = document.getElementById('featured').checked;
-    const imageFile = document.getElementById('productImage').files[0];
+async function addProductHandler(e) {
+  e.preventDefault();
 
-    let imageUrl = '';
-    if (imageFile) {
-      const { error } = await supabase.storage.from('product-images').upload(`public/${imageFile.name}`, imageFile, { upsert: true });
-      if (!error) {
-        imageUrl = `${SUPABASE_URL}/storage/v1/object/public/product-images/${imageFile.name}`;
-      }
+  const name = document.getElementById("productName").value;
+  const price = document.getElementById("productPrice").value;
+  const category = document.getElementById("productCategory").value;
+  const description = document.getElementById("productDescription").value;
+  const inStock = document.getElementById("inStock").checked;
+  const featured = document.getElementById("featured").checked;
+  const imageFile = document.getElementById("productImage").files[0];
+
+  let imageUrl = "";
+  if (imageFile) {
+    const filePath = `public/${Date.now()}_${imageFile.name}`;
+    const { error: uploadError } = await supabase.storage
+      .from("product-images")
+      .upload(filePath, imageFile, { upsert: true });
+
+    if (uploadError) {
+      alert("Error uploading image: " + uploadError.message);
+      return;
     }
 
-    const { error } = await supabase.from('products').insert([{ name, price, category, description, inStock, featured, imageUrl }]);
-    if (error) alert('Error adding product');
-    else {
-      alert('Product added successfully');
-      productForm.reset();
-      renderAdminProducts();
-      renderProductSection();
-    }
+    const { data } = supabase.storage
+      .from("product-images")
+      .getPublicUrl(filePath);
+    imageUrl = data.publicUrl;
   }
 
-  productForm.onsubmit = addProductHandler;
+  const { error } = await supabase.from("products").insert([
+    { name, price, category, description, in_stock: inStock, featured, image_url: imageUrl },
+  ]);
+
+  if (error) alert("Error adding product: " + error.message);
+  else {
+    alert("Product added successfully");
+    productForm.reset();
+    renderAdminProducts();
+    renderProductSection();
+  }
+}
+productForm.onsubmit = addProductHandler;
+
 // ---------------- Render Products ----------------
 async function renderProductSection() {
   const { data: products } = await supabase.from("products").select("*");
-  productList.innerHTML = "";
 
+  productList.innerHTML = "";
   products.forEach((product) => {
     const card = document.createElement("div");
     card.classList.add("product-card");
-
-    if (product.inStock) {
-      card.classList.add("in-stock");
-    } else {
-      card.classList.add("out-of-stock");
-    }
+    card.style.cssText =
+      "border:1px solid #ccc;padding:15px;border-radius:10px;background:" +
+      (product.in_stock ? "#e0ffe0" : "#ffe0e0") +
+      ";width:220px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;";
 
     card.innerHTML = `
-      <img src="${product.imageUrl || "placeholder.png"}" alt="${product.name}" class="product-image">
-      <h3 class="product-name">${product.name}</h3>
-      <p class="product-category"><strong>Category:</strong> ${product.category}</p>
-      <p class="product-price"><strong>Price:</strong> Rs. ${parseFloat(product.price).toFixed(2)}</p>
-      <p class="product-description">${product.description || ""}</p>
-      <p class="product-stock"><strong>${product.inStock ? "In Stock" : "Out of Stock"}</strong></p>
-      <button class="add-to-cart-btn" ${!product.inStock ? "disabled" : ""}>Add to Cart</button>
-      <button class="order-now-btn" ${!product.inStock ? "disabled" : ""}>Order Now</button>
+      <img src="${product.image_url || "placeholder.png"}" alt="${
+      product.name
+    }" style="width:150px;height:150px;object-fit:cover;border-radius:10px;">
+      <h3>${product.name}</h3>
+      <p><strong>Category:</strong> ${product.category}</p>
+      <p><strong>Price:</strong> Rs. ${parseFloat(product.price).toFixed(2)}</p>
+      <p>${product.description || ""}</p>
+      <p><strong>${product.in_stock ? "In Stock" : "Out of Stock"}</strong></p>
+      <button class="add-to-cart-btn" ${
+        !product.in_stock ? "disabled" : ""
+      }>Add to Cart</button>
+      <button class="order-now-btn" ${
+        !product.in_stock ? "disabled" : ""
+      }>Order Now</button>
     `;
     productList.appendChild(card);
   });
@@ -185,7 +206,6 @@ const checkoutBtn = document.getElementById("checkoutBtn");
 const closeCartBtn = document.getElementById("closeCartBtn");
 const cartIcon = document.querySelector(".cart");
 
-// Add cart count span if not exist
 if (!document.querySelector(".cart-count")) {
   const span = document.createElement("span");
   span.className = "cart-count";
@@ -193,12 +213,10 @@ if (!document.querySelector(".cart-count")) {
   cartIcon.appendChild(span);
 }
 
-// Save cart to localStorage
 function saveCart() {
   localStorage.setItem("cart", JSON.stringify(cart));
 }
 
-// Load cart from localStorage on page load
 window.addEventListener("load", () => {
   const saved = localStorage.getItem("cart");
   if (saved) {
@@ -224,7 +242,6 @@ function renderCart() {
 
   cartTotalEl.textContent = `Total: Rs. ${total.toFixed(2)}`;
   document.querySelector(".cart-count").textContent = cart.length;
-
   saveCart();
 }
 
@@ -248,119 +265,62 @@ cartIcon.addEventListener("click", () => {
 
 closeCartBtn.addEventListener("click", () => (cartSection.style.display = "none"));
 
-// ---------------- Checkout + WhatsApp ----------------
-const WHATSAPP_NUMBER = "94788878600";
+// ---------------- WhatsApp Order ----------------
+async function sendWhatsAppOrder(products) {
+  if (!products.length) return alert("No products selected!");
 
-function openCheckoutForm(cartItems, total) {
-  const formOverlay = document.createElement("div");
-  formOverlay.classList.add("checkout-overlay");
+  const method = prompt(
+    "Select Payment Method:\n1 = Cash on Delivery\n2 = Bank Transfer"
+  );
+  let payment = "";
+  if (method === "1") payment = "Cash on Delivery";
+  else if (method === "2") payment = "Bank Transfer";
+  else return alert("Invalid selection");
 
-  formOverlay.innerHTML = `
-    <div class="checkout-form">
-      <h2>Confirmation</h2>
-      <label>Name*</label>
-      <input type="text" id="custName" required>
-      <label>Address*</label>
-      <textarea id="custAddress" required></textarea>
-      <label>Contact Number*</label>
-      <input type="tel" id="custPhone" required>
-      <label>Email*</label>
-      <input type="email" id="custEmail" required>
-      <label>Payment Method*</label>
-      <div class="payment-options">
-        <label><input type="radio" name="payment" value="Cash on Delivery" checked> Cash on Delivery</label>
-        <label><input type="radio" name="payment" value="Bank Transfer"> Bank Transfer</label>
-      </div>
-      <button id="confirmOrderBtn">Confirm</button>
-      <button id="cancelOrderBtn" class="cancel">Cancel</button>
-    </div>
-  `;
+  let message = "Hello, I would like to order the following items:%0A";
+  let total = 0;
+  products.forEach((p) => {
+    total += parseFloat(p.price);
+    message += `- ${p.name} (Rs. ${parseFloat(p.price).toFixed(2)})%0A`;
+  });
+  message += `Total: Rs. ${total.toFixed(2)}%0APayment Method: ${payment}%0AThank you!`;
 
-  document.body.appendChild(formOverlay);
-
-  document.getElementById("cancelOrderBtn").onclick = () => formOverlay.remove();
-
-  document.getElementById("confirmOrderBtn").onclick = () => {
-    const name = document.getElementById("custName").value.trim();
-    const address = document.getElementById("custAddress").value.trim();
-    const phone = document.getElementById("custPhone").value.trim();
-    const email = document.getElementById("custEmail").value.trim();
-    const payment = document.querySelector("input[name='payment']:checked").value;
-
-    if (!name || !address || !phone || !email) {
-      alert("Please fill in all fields.");
-      return;
-    }
-
-    let itemsText = "";
-    cartItems.forEach(item => {
-      itemsText += `${item.qty}x ${item.name} - Rs.${parseFloat(item.price).toFixed(2)}\n`;
-    });
-
-    const message = `
-🛒 New Order - AYSHLYNE Stationery
-
-👤 Name: ${name}
-📍 Address: ${address}
-📞 Contact: ${phone}
-✉️ Email: ${email}
-💳 Payment: ${payment}
-
-Products:
-${itemsText}
-
-💰 Total: Rs.${total.toFixed(2)}
-    `;
-
-    const whatsappURL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
-    window.open(whatsappURL, "_blank");
-
-    cart = [];
-    renderCart();
-    localStorage.removeItem("cart");
-    formOverlay.remove();
-  };
+  window.open(`https://wa.me/+94788878600?text=${message}`, "_blank");
 }
 
-checkoutBtn.addEventListener("click", () => {
-  const cartItems = [];
-  document.querySelectorAll("#cartItems .cart-item, #cartItems div").forEach(itemEl => {
-    const name = itemEl.querySelector(".item-name")?.textContent || itemEl.querySelector("span")?.textContent.split(" (")[0];
-    const priceText = itemEl.querySelector(".item-price")?.textContent || itemEl.querySelector("span")?.textContent;
-    const price = parseFloat(priceText.replace(/[^\d.]/g, "")) || 0;
-    cartItems.push({ name, qty: 1, price });
-  });
-
-  const totalText = document.getElementById("cartTotal").textContent.replace(/[^\d.]/g, "");
-  const total = parseFloat(totalText) || 0;
-
-  if (cartItems.length === 0) {
-    alert("Your cart is empty.");
-    return;
+document.addEventListener("click", (e) => {
+  if (e.target.classList.contains("add-to-cart-btn")) {
+    if (e.target.disabled) return;
+    const card = e.target.closest(".product-card");
+    const product = {
+      name: card.querySelector("h3").textContent,
+      price: parseFloat(
+        card
+          .querySelector("p:nth-of-type(2)")
+          .textContent.replace("Price:", "").replace("Rs.", "").trim()
+      ),
+    };
+    addToCart(product);
   }
 
-  openCheckoutForm(cartItems, total);
+  if (e.target.classList.contains("order-now-btn")) {
+    if (e.target.disabled) return;
+    const card = e.target.closest(".product-card");
+    const product = {
+      name: card.querySelector("h3").textContent,
+      price: parseFloat(
+        card
+          .querySelector("p:nth-of-type(2)")
+          .textContent.replace("Price:", "").replace("Rs.", "").trim()
+      ),
+    };
+    sendWhatsAppOrder([product]);
+  }
 });
 
-// ---------------- Product Buttons ----------------
-document.addEventListener("DOMContentLoaded", () => {
-  document.addEventListener("click", (e) => {
-    if (e.target.classList.contains("add-to-cart-btn")) {
-      const card = e.target.closest(".product-card");
-      const product = {
-        name: card.querySelector("h3").textContent,
-        price: parseFloat(card.querySelector(".product-price").textContent.replace("Price: Rs.", "").trim()),
-      };
-      addToCart(product);
-    }
-
-    if (e.target.classList.contains("order-now-btn")) {
-      const card = e.target.closest(".product-card");
-      const product = {
-        name: card.querySelector("h3").textContent,
-        price: parseFloat(card.querySelector(".product-price").textContent.replace("Price: Rs.", "").trim()),
-      };
-      openCheckoutForm([product], product.price);
-    }
-  });
+checkoutBtn.addEventListener("click", () => {
+  sendWhatsAppOrder(cart);
+  cart = [];
+  renderCart();
+  localStorage.removeItem("cart");
 });
