@@ -181,14 +181,14 @@ async function renderProductSection() {
     const card = document.createElement("div");
     card.classList.add("product-card");
     // prefer styling in CSS—keep minimal inline fallback for background
-    const bgColor = product.in_stock ? "#ffffff" : "#fff5f5";
+    const bgColor = product.in_stock ? "hsla(124, 82%, 94%, 1.00)" : "#f6dfdfff";
     card.style.cssText =
-      `border:1px solid #eee;padding:12px;margin:18%;border-radius:12px;background:${bgColor};width:240px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;box-shadow:0 2px 8px rgba(0,0,0,0.04);`;
+      `border:2px solid #0b0b0bff;padding:10px;border-radius:12px;background:${bgColor};width:240px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:2px;box-shadow:0 2px 5px rgba(15, 14, 14, 1);`;
 
     const priceValue = parseFloat(product.price) || 0;
 
     card.innerHTML = `
-      <img src="${product.image_url || "placeholder.png"}" alt="${product.name}" class="product-image" style="width:160px;height:160px;object-fit:cover;border-radius:10px;">
+      <img src="${product.image_url || "placeholder.png"}" alt="${product.name}" class="product-image" style="width:160px;height:200px;object-fit:cover;border-radius:10px;">
       <h3 class="product-name" style="margin:6px 0">${product.name}</h3>
       <p class="product-category" style="margin:0 0 6px 0">Category: <span>${product.category}</span></p>
       <p class="product-price" data-price="${priceValue}" style="margin:0;padding:6px 10px;border-radius:8px;display:inline-block;font-weight:700;">Rs. ${priceValue.toFixed(2)}</p>
@@ -197,14 +197,14 @@ async function renderProductSection() {
         ${product.in_stock ? "In Stock" : "Out of Stock"}
       </p>
 
-      <div class="qty-wrapper" style="margin-top:8px;">
+      <div class="qty-wrapper" style="margin-top:2px;">
         <label style="margin-right:6px;">Qty:</label>
         <input type="number" class="product-qty" min="1" value="1" ${!product.in_stock ? "disabled" : ""} style="width:64px;padding:6px;border:1px solid #ddd;border-radius:6px;text-align:center;">
       </div>
 
       <div class="btn-group" style="display:flex;gap:10px;margin-top:10px;">
-        <button class="add-to-cart-btn" ${!product.in_stock ? "disabled" : ""} style="padding:8px 12px;border-radius:8px;border:none;cursor:pointer;background:#3498db;color:#fff;">Add to Cart</button>
-        <button class="order-now-btn" ${!product.in_stock ? "disabled" : ""} style="padding:8px 12px;border-radius:8px;border:none;cursor:pointer;background:#e74c3c;color:#fff;">Order Now</button>
+        <button class="add-to-cart-btn" ${!product.in_stock ? "disabled" : ""} style="padding:8px 12px;border-radius:8px;border:none;cursor:pointer;background:blue;color:#fff;">Add to Cart</button>
+        <button class="order-now-btn" ${!product.in_stock ? "disabled" : ""} style="padding:8px 12px;border-radius:8px;border:none;cursor:pointer;background:green;color:#fff;">Buy Now</button>
       </div>
     `;
     productList.appendChild(card);
@@ -309,7 +309,7 @@ if (closeCartBtn) {
 }
 
 // ---------------- Checkout + WhatsApp ----------------
-const WHATSAPP_NUMBER = "94788878600";
+const WHATSAPP_NUMBER = "94788878668";
 
 function openCheckoutForm(cartItems, total) {
   const formOverlay = document.createElement("div");

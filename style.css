@@ -18,7 +18,7 @@ body {
   position: sticky;
   top: 0;
   width: 100%;
-  background: rgba(15, 15, 15, 0.55);
+  background: rgba(250, 159, 3, 0.612);
   
   display: flex;
   align-items: center;
@@ -199,7 +199,7 @@ header nav a:hover::after {
 
 body {
   font-family: "Poppins", sans-serif;
-  background: linear-gradient(to right, rgb(238, 247, 100), white);
+  background: linear-gradient(to right, rgb(246, 46, 143), white);
   color: #2a1f2f;
   line-height: 1.5;
   padding: 0;
@@ -281,7 +281,7 @@ body {
 .hero-tagline {
   font-size: 1rem;
   font-weight: 600;
-  background: linear-gradient(90deg, rgb(32, 6, 232),rgb(223, 4, 4));
+  background: linear-gradient(90deg, rgb(21, 3, 150),rgb(206, 2, 2));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   margin-bottom: 20px;
@@ -369,6 +369,8 @@ body {
 
 /* ============ Product Section ============ */
 /* Product Card Styling */
+.product-section{ text-align: center;
+background: color(srgb red green blue) }
 .product-card {
   border: 1px solid #ddd;
   border-radius: 12px;
@@ -398,32 +400,32 @@ body {
 
 /* Name, Category, Price */
 .product-card h3 {
-  color: #333;
+  color: #ca3a0e;
   font-size: 18px;
   font-weight: bold;
 }
 
 .product-card .category {
-  color: #0077cc;
+  color: #0c0359;
   font-size: 14px;
 }
 
 .product-card .product-price {
-  background: #ffeaa7;
+  background: #f8277e;
   padding: 5px 10px;
   border-radius: 6px;
   font-weight: bold;
-  color: #d35400;
+  color: #03410c;
 }
 
 /* Stock Status */
 .in-stock {
-  color: #27ae60;
+  color: #085819;
   font-weight: bold;
 }
 
 .out-of-stock {
-  color: #c0392b;
+  color: #ce1702;
   font-weight: bold;
 }
 
@@ -440,7 +442,7 @@ body {
 }
 
 .add-to-cart-btn:hover {
-  background: #2980b9;
+  background: #3ef763;
 }
 
 .order-now-btn {
@@ -537,7 +539,7 @@ body {
   margin: 25px 0;
 }
 .contact-cards .card {
-  background: linear-gradient(to right, rgb(238, 247, 100), white);
+  background: linear-gradient(to right, rgb(37, 23, 228), white);
   padding: 18px;
   border-radius: 10px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
@@ -679,7 +681,7 @@ footer .footer-bottom {
   bottom: 0;
   left: 0;
   right: 0;
-  background: linear-gradient(to top, black,rgb(248, 248, 53));
+  background: linear-gradient(to top, black,rgb(246, 245, 244));
   display: flex;
   justify-content: space-around;
   padding: 10px 0;
