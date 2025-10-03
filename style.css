@@ -18,7 +18,7 @@ body {
   position: sticky;
   top: 0;
   width: 100%;
-  background: rgba(250, 159, 3, 0.612);
+  background: rgba(4, 4, 4, 0.74);
   
   display: flex;
   align-items: center;
@@ -79,7 +79,7 @@ body {
   bottom: -2px;
   width: 0%;
   height: 2px;
-  background: linear-gradient(90deg, #ffdd00, #ff6b6b);
+  background: linear-gradient(90deg, #ffdd00, #ee3333);
   transition: width 0.3s;
 }
 .header nav ul li a:hover::after {
@@ -197,9 +197,9 @@ header nav a:hover::after {
   padding: 0;
 }
 
-body {
+.body {
   font-family: "Poppins", sans-serif;
-  background: linear-gradient(to right, rgb(246, 46, 143), white);
+ background: linear-gradient(to right, rgb(6, 215, 27),white);
   color: #2a1f2f;
   line-height: 1.5;
   padding: 0;
@@ -264,7 +264,7 @@ body {
   text-align: center;
  padding: 50px 15px;
   align-items: center;
-
+background: linear-gradient(to right, rgb(247, 249, 248),rgb(253, 190, 123));
 }
 
 .hero-title {
@@ -312,7 +312,7 @@ body {
 }
 
 .btn.primary {
-  background: linear-gradient(to right, rgb(6, 215, 27),white);
+  background: linear-gradient(to right, rgb(93, 250, 108),white);
   color: hsl(0, 0%, 4%);
 }
 
@@ -321,7 +321,7 @@ body {
 }
 
 .btn.secondary {
-  background: linear-gradient(to right, rgb(241, 40, 5),white);
+  background: linear-gradient(to right, rgb(248, 118, 95),white);
   border: #0a0a0a; 
 }
 
@@ -370,15 +370,17 @@ body {
 /* ============ Product Section ============ */
 /* Product Card Styling */
 .product-section{ text-align: center;
-background: color(srgb red green blue) }
+
+ background: linear-gradient(to right, rgb(252, 184, 95),rgb(251, 250, 249));
+}
 .product-card {
   border: 1px solid #ddd;
-  border-radius: 12px;
+  border-radius: 50px;
   padding: 15px;
   margin: 10px;
   background: #fff;
-  display: flex;
-  flex-direction: column;
+
+  
   align-items: center;
   text-align: center;
   gap: 10px;
@@ -400,39 +402,40 @@ background: color(srgb red green blue) }
 
 /* Name, Category, Price */
 .product-card h3 {
-  color: #ca3a0e;
+  color: #14026c;
   font-size: 18px;
   font-weight: bold;
 }
 
 .product-card .category {
-  color: #0c0359;
+  color: #050505;
   font-size: 14px;
 }
 
 .product-card .product-price {
-  background: #f8277e;
+  background: #fabad5;
   padding: 5px 10px;
   border-radius: 6px;
   font-weight: bold;
-  color: #03410c;
+  color: #0e0f0e;
 }
 
 /* Stock Status */
 .in-stock {
-  color: #085819;
-  font-weight: bold;
+  color: #05a805;
+  font-weight: bolder;
 }
 
 .out-of-stock {
-  color: #ce1702;
+  color: #fa0505;
   font-weight: bold;
 }
 
 /* Buttons */
 .add-to-cart-btn {
-  background: #0121d6;
-  color: #fff;
+  background: #a0fa92;
+  color: #0b0b0b;
+  font-weight: bold;
   border: none;
   padding: 8px 12px;
   border-radius: 6px;
@@ -446,8 +449,9 @@ background: color(srgb red green blue) }
 }
 
 .order-now-btn {
-  background: #02f01e;
-  color: #fff;
+  background: #fb9090;
+  color: #0c0c0c;
+  font-weight: bold;
   border: none;
   padding: 8px 12px;
   border-radius: 6px;
@@ -457,7 +461,7 @@ background: color(srgb red green blue) }
 }
 
 .order-now-btn:hover {
-  background: #557d62;
+  background: #f74803;
 }
 
 /* Quantity Control */
@@ -503,7 +507,7 @@ background: color(srgb red green blue) }
   padding: 60px 20px;
   background: #fafafa;
   text-align: center;
-  background: linear-gradient(to right, rgb(238, 247, 100), white);
+  background: linear-gradient(to right, rgb(247, 249, 248),rgb(253, 190, 123));
 }
 .about-section .section-title {
   text-align: center;
@@ -517,7 +521,7 @@ background: color(srgb red green blue) }
   margin-top: 20px;
 }
 .feature {
-  background: linear-gradient(to right, #fefff7, hsl(66, 88%, 68%));
+  background: linear-gradient(to right, #63ed65, hsl(60, 25%, 98%));
   padding: 15px;
   border-radius: 10px;
   text-align: center;
@@ -529,7 +533,7 @@ background: color(srgb red green blue) }
 /* ============ Contact Section ============ */
 .contact-section {
   padding: 60px 20px;
-  background: linear-gradient(to right, #fdfdfb, rgb(238, 249, 81));
+  background: linear-gradient(to right, hwb(30 31% 2%), rgb(252, 252, 251));
   text-align: center;
 }
 .contact-cards {
@@ -539,7 +543,7 @@ background: color(srgb red green blue) }
   margin: 25px 0;
 }
 .contact-cards .card {
-  background: linear-gradient(to right, rgb(37, 23, 228), white);
+  background: linear-gradient(to right, rgb(83, 250, 100), white);
   padding: 18px;
   border-radius: 10px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
@@ -585,7 +589,7 @@ footer .footer-bottom {
   font-weight: 600;
   transition: 0.3s;
   font-size: 0.75rem;
-  background: linear-gradient(to right, rgb(254, 2, 170),white);
+  background: linear-gradient(to right, rgb(251, 248, 250),rgb(93, 246, 131));
   color: hsl(0, 0%, 4%);
 }
 
@@ -681,17 +685,22 @@ footer .footer-bottom {
   bottom: 0;
   left: 0;
   right: 0;
-  background: linear-gradient(to top, black,rgb(246, 245, 244));
+  background: linear-gradient(to top, rgb(87, 7, 7),rgb(136, 108, 81));
   display: flex;
   justify-content: space-around;
   padding: 10px 0;
   border-top: 1px solid rgba(255,255,255,0.1);
   z-index: 1000;
 }
+
+.bottom-nav a{text-decoration: none;}
+
+
 .bottom-nav .nav-item {
-  color: #fff;
+  color: #faf7f7;
   text-align: center;
   font-size: 14px;
+  font-weight: bold;
 }
 .bottom-nav .icon {
   display: block;

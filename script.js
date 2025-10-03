@@ -181,9 +181,9 @@ async function renderProductSection() {
     const card = document.createElement("div");
     card.classList.add("product-card");
     // prefer styling in CSS—keep minimal inline fallback for background
-    const bgColor = product.in_stock ? "hsla(124, 82%, 94%, 1.00)" : "#f6dfdfff";
+    const bgColor = product.in_stock ? "hsla(124, 100%, 97%, 1.00)" : "#f6e9e9ff";
     card.style.cssText =
-      `border:2px solid #0b0b0bff;padding:10px;border-radius:12px;background:${bgColor};width:240px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:2px;box-shadow:0 2px 5px rgba(15, 14, 14, 1);`;
+      `border:1.5px solid #0b0b0bff;padding:10px;border-radius:12px;background:${bgColor};width:240px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:2px;box-shadow:0 2px 5px rgba(15, 14, 14, 1);`;
 
     const priceValue = parseFloat(product.price) || 0;
 
@@ -197,14 +197,14 @@ async function renderProductSection() {
         ${product.in_stock ? "In Stock" : "Out of Stock"}
       </p>
 
-      <div class="qty-wrapper" style="margin-top:2px;">
+      <div class="qty-wrapper" style="margin-top:10px;">
         <label style="margin-right:6px;">Qty:</label>
         <input type="number" class="product-qty" min="1" value="1" ${!product.in_stock ? "disabled" : ""} style="width:64px;padding:6px;border:1px solid #ddd;border-radius:6px;text-align:center;">
       </div>
 
       <div class="btn-group" style="display:flex;gap:10px;margin-top:10px;">
-        <button class="add-to-cart-btn" ${!product.in_stock ? "disabled" : ""} style="padding:8px 12px;border-radius:8px;border:none;cursor:pointer;background:blue;color:#fff;">Add to Cart</button>
-        <button class="order-now-btn" ${!product.in_stock ? "disabled" : ""} style="padding:8px 12px;border-radius:8px;border:none;cursor:pointer;background:green;color:#fff;">Buy Now</button>
+        <button class="add-to-cart-btn" ${!product.in_stock ? "disabled" : ""} style="padding:8px 12px;border-radius:8px;border:none;cursor:pointer;">Add to Cart</button>
+        <button class="order-now-btn" ${!product.in_stock ? "disabled" : ""} style="padding:8px 12px;border-radius:8px;border:none;cursor:pointer;">Buy Now</button>
       </div>
     `;
     productList.appendChild(card);
