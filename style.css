@@ -368,6 +368,133 @@ body {
 }
 
 /* ============ Product Section ============ */
+/* Product Card Styling */
+.product-card {
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 15px;
+  margin: 10px;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+  transition: transform 0.2s;
+}
+
+.product-card:hover {
+  transform: translateY(-3px);
+}
+
+/* Image */
+.product-card img {
+  width: 160px;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+/* Name, Category, Price */
+.product-card h3 {
+  color: #333;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.product-card .category {
+  color: #0077cc;
+  font-size: 14px;
+}
+
+.product-card .product-price {
+  background: #ffeaa7;
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-weight: bold;
+  color: #d35400;
+}
+
+/* Stock Status */
+.in-stock {
+  color: #27ae60;
+  font-weight: bold;
+}
+
+.out-of-stock {
+  color: #c0392b;
+  font-weight: bold;
+}
+
+/* Buttons */
+.add-to-cart-btn {
+  background: #0121d6;
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.3s;
+}
+
+.add-to-cart-btn:hover {
+  background: #2980b9;
+}
+
+.order-now-btn {
+  background: #02f01e;
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.3s;
+}
+
+.order-now-btn:hover {
+  background: #557d62;
+}
+
+/* Quantity Control */
+.qty-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+}
+
+.qty-btn {
+  background: #ddd;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 50%;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.qty-btn:hover {
+  background: #bbb;
+}
+
+.qty-value {
+  font-size: 16px;
+  font-weight: bold;
+  min-width: 20px;
+  text-align: center;
+}
+
+/* Mobile Center */
+@media (max-width: 600px) {
+  .product-card {
+    width: 90%;
+    margin: auto;
+  }
+}
+
 
 /* ============ About Section ============ */
 .about-section {
