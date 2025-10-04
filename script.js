@@ -236,7 +236,7 @@ async function renderProductSection(category = null) {
       </div>
       <div class="btn-group">
         <button class="add-to-cart-btn" ${!product.in_stock ? "disabled" : ""}>Add to Cart</button>
-        <button class="order-now-btn" ${!product.in_stock ? "disabled" : ""}>Order Now</button>
+        <button class="order-now-btn" ${!product.in_stock ? "disabled" : ""}>Buy Now</button>
       </div>
     `;
 
