@@ -38,17 +38,17 @@
       <div class="grid">
         <input type="text" id="productName" placeholder="Product Name *" required>
         <input type="number" id="productPrice" placeholder="Price (Rs.0.00) *" required>
-        <label>Category</label>
-<select  value="Accessories">Accessories></option>
-</select>
-<seect id="productCategory">
+
+<label for="productCategory">Category</label>
+<select id="productCategory" required>
   <option value="">-- Select Category --</option>
   <option value="Notebooks">Notebooks</option>
   <option value="Writing Instruments">Writing Instruments</option>
   <option value="Color & Arts">Color & Arts</option>
   <option value="Paper Products">Paper Products</option>
-  
-        <input type="file" id="productImage" accept="image/*">
+  <option value="Accessories">Accessories</option>
+</select>
+  <input type="file" id="productImage" accept="image/*">
       </div>
       <textarea id="productDescription" placeholder="Enter product description"></textarea>
       <label>
