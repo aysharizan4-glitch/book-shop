@@ -60,7 +60,7 @@ async function renderAdminProducts() {
     adminProductList.appendChild(div);
   });
 
-  // ---------------- Edit product ----------------
+  // Edit product
   document.querySelectorAll(".edit-btn").forEach((btn) => {
     btn.addEventListener("click", async () => {
       const productId = btn.dataset.id;
@@ -109,7 +109,7 @@ async function renderAdminProducts() {
     });
   });
 
-  // ---------------- Delete product ----------------
+  // Delete product
   document.querySelectorAll(".delete-btn").forEach((btn) => {
     btn.addEventListener("click", async () => {
       if (confirm("Are you sure you want to delete this product?")) {
@@ -125,6 +125,7 @@ async function renderAdminProducts() {
 }
 renderAdminProducts();
 
+// ---------------- Add Product ----------------
 // ---------------- Add Product ----------------
 async function addProductHandler(e) {
   if (e && e.preventDefault) e.preventDefault();
@@ -171,46 +172,82 @@ async function addProductHandler(e) {
 if (productForm) productForm.onsubmit = addProductHandler;
 
 
-// ---------------- Render Products ----------------
-async function renderProductSection() {
-  const { data: products } = await supabase.from("products").select("*");
+// ---------------- Category Filter ----------------
+document.querySelectorAll(".category-card").forEach((card) => {
+  card.addEventListener("click", () => {
+    const categoryName = card.querySelector("h3").textContent.trim();
+    renderProductSection(categoryName);
+
+    // ✅ Scroll to products section automatically
+    const productSection = document.getElementById("product-list");
+    if (productSection) {
+      productSection.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  });
+});
+
+// ---------------- Show All Button ----------------
+const showAllBtn = document.getElementById("showAllBtn");
+if (showAllBtn) {
+  showAllBtn.addEventListener("click", () => {
+    renderProductSection();
+
+    // ✅ Scroll to products section automatically
+    const productSection = document.getElementById("product-list");
+    if (productSection) {
+      productSection.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  });
+}
+
+// ---------------- Render Products (with category filter) ----------------
+async function renderProductSection(category = null) {
+  let query = supabase.from("products").select("*");
+  if (category) query = query.eq("category", category);
+
+  const { data: products, error } = await query;
+  if (error) {
+    console.error("Error fetching products:", error.message);
+    return;
+  }
 
   if (!productList) return;
   productList.innerHTML = "";
+
   products.forEach((product) => {
     const card = document.createElement("div");
     card.classList.add("product-card");
-    // prefer styling in CSS—keep minimal inline fallback for background
-    const bgColor = product.in_stock ? "hsla(124, 100%, 97%, 1.00)" : "#f6e9e9ff";
-    card.style.cssText =
-      `border:1.5px solid #0b0b0bff;padding:10px;border-radius:12px;background:${bgColor};width:240px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:2px;box-shadow:0 2px 5px rgba(15, 14, 14, 1);`;
 
+    const bgColor = product.in_stock ? "#f1fff4" : "#ffecec";
     const priceValue = parseFloat(product.price) || 0;
 
     card.innerHTML = `
-      <img src="${product.image_url || "placeholder.png"}" alt="${product.name}" class="product-image" style="width:160px;height:200px;object-fit:cover;border-radius:10px;">
-      <h3 class="product-name" style="margin:6px 0">${product.name}</h3>
-      <p class="product-category" style="margin:0 0 6px 0">Category: <span>${product.category}</span></p>
-      <p class="product-price" data-price="${priceValue}" style="margin:0;padding:6px 10px;border-radius:8px;display:inline-block;font-weight:700;">Rs. ${priceValue.toFixed(2)}</p>
-      <p class="product-desc" style="margin:6px 0 0 0;font-size:0.95rem">${product.description || ""}</p>
-      <p class="product-stock ${product.in_stock ? "in-stock" : "out-of-stock"}" style="margin:8px 0 0 0;font-weight:700;">
+      <img src="${product.image_url || "placeholder.png"}" alt="${product.name}" class="product-image">
+      <h3 class="product-name">${product.name}</h3>
+      <p class="product-category">Category: <span>${product.category}</span></p>
+      <p class="product-price" data-price="${priceValue}">Rs. ${priceValue.toFixed(2)}</p>
+      <p class="product-desc">${product.description || ""}</p>
+      <p class="product-stock" style="color:${product.in_stock ? "green" : "red"};">
         ${product.in_stock ? "In Stock" : "Out of Stock"}
       </p>
-
-      <div class="qty-wrapper" style="margin-top:10px;">
-        <label style="margin-right:6px;">Qty:</label>
-        <input type="number" class="product-qty" min="1" value="1" ${!product.in_stock ? "disabled" : ""} style="width:64px;padding:6px;border:1px solid #ddd;border-radius:6px;text-align:center;">
+      <div class="qty-wrapper">
+        <label>Qty:</label>
+        <input type="number" class="product-qty" min="1" value="1" ${!product.in_stock ? "disabled" : ""}>
       </div>
-
-      <div class="btn-group" style="display:flex;gap:10px;margin-top:10px;">
-        <button class="add-to-cart-btn" ${!product.in_stock ? "disabled" : ""} style="padding:8px 12px;border-radius:8px;border:none;cursor:pointer;">Add to Cart</button>
-        <button class="order-now-btn" ${!product.in_stock ? "disabled" : ""} style="padding:8px 12px;border-radius:8px;border:none;cursor:pointer;">Buy Now</button>
+      <div class="btn-group">
+        <button class="add-to-cart-btn" ${!product.in_stock ? "disabled" : ""}>Add to Cart</button>
+        <button class="order-now-btn" ${!product.in_stock ? "disabled" : ""}>Order Now</button>
       </div>
     `;
+
+    card.style.background = bgColor;
     productList.appendChild(card);
   });
 }
+
+// Initial render
 renderProductSection();
+
 // ---------------- Cart ----------------
 const cartSection = document.getElementById("cartSection");
 const cartItemsContainer = document.getElementById("cartItems");
@@ -219,13 +256,11 @@ const checkoutBtn = document.getElementById("checkoutBtn");
 const closeCartBtn = document.getElementById("closeCartBtn");
 const cartIcon = document.querySelector(".cart");
 
-if (cartIcon) {
-  if (!document.querySelector(".cart-count")) {
-    const span = document.createElement("span");
-    span.className = "cart-count";
-    span.textContent = "0";
-    cartIcon.appendChild(span);
-  }
+if (!document.querySelector(".cart-count")) {
+  const span = document.createElement("span");
+  span.className = "cart-count";
+  span.textContent = "0";
+  cartIcon.appendChild(span);
 }
 
 function saveCart() {
@@ -235,78 +270,51 @@ function saveCart() {
 window.addEventListener("load", () => {
   const saved = localStorage.getItem("cart");
   if (saved) {
-    try {
-      cart = JSON.parse(saved) || [];
-    } catch (err) {
-      cart = [];
-    }
+    cart = JSON.parse(saved);
     renderCart();
   }
 });
 
 function renderCart() {
-  if (!cartItemsContainer || !cartTotalEl) return;
   cartItemsContainer.innerHTML = "";
   let total = 0;
   cart.forEach((item, index) => {
-    const itemPrice = parseFloat(item.price) || 0;
-    const itemQty = parseInt(item.qty) || 1;
-    const subTotal = itemPrice * itemQty;
-    total += subTotal;
+    total += parseFloat(item.price);
     const div = document.createElement("div");
     div.style.cssText =
-      "display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;";
+      "display:flex;justify-content:space-between;margin-bottom:5px;";
     div.innerHTML = `
-      <span>${item.name} x${itemQty} — Rs. ${itemPrice.toFixed(2)} each (Rs. ${subTotal.toFixed(2)})</span>
-      <button data-index="${index}" style="background:#dc3545;color:#fff;border:none;border-radius:5px;padding:6px 8px;cursor:pointer;">Remove</button>
+      <span>${item.name} (Rs. ${parseFloat(item.price).toFixed(2)})</span>
+      <button data-index="${index}" style="background:#dc3545;color:#fff;border:none;border-radius:5px;padding:2px 6px;cursor:pointer;">Remove</button>
     `;
     cartItemsContainer.appendChild(div);
   });
 
   cartTotalEl.textContent = `Total: Rs. ${total.toFixed(2)}`;
-  const cartCountEl = document.querySelector(".cart-count");
-  if (cartCountEl) cartCountEl.textContent = cart.reduce((s, it) => s + (parseInt(it.qty) || 1), 0);
+  document.querySelector(".cart-count").textContent = cart.length;
   saveCart();
 }
 
 function addToCart(product) {
-  // product: { name, price, qty }
-  const existingIndex = cart.findIndex(
-    (c) => c.name === product.name && parseFloat(c.price) === parseFloat(product.price)
-  );
-  if (existingIndex > -1) {
-    // increase qty
-    cart[existingIndex].qty = (parseInt(cart[existingIndex].qty) || 0) + (parseInt(product.qty) || 1);
-  } else {
-    cart.push({ name: product.name, price: parseFloat(product.price) || 0, qty: parseInt(product.qty) || 1 });
-  }
+  cart.push(product);
   renderCart();
 }
 
-if (cartItemsContainer) {
-  cartItemsContainer.addEventListener("click", (e) => {
-    if (e.target.tagName === "BUTTON") {
-      const idx = e.target.dataset.index;
-      cart.splice(idx, 1);
-      renderCart();
-    }
-  });
-}
+cartItemsContainer.addEventListener("click", (e) => {
+  if (e.target.tagName === "BUTTON") {
+    const idx = e.target.dataset.index;
+    cart.splice(idx, 1);
+    renderCart();
+  }
+});
 
-if (cartIcon) {
-  cartIcon.addEventListener("click", () => {
-    if (cartSection) {
-      cartSection.style.display = "block";
-      cartSection.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-  });
-}
+cartIcon.addEventListener("click", () => {
+  cartSection.style.display = "block";
+  cartSection.scrollIntoView({ behavior: "smooth", block: "start" });
+});
 
-if (closeCartBtn) {
-  closeCartBtn.addEventListener("click", () => {
-    if (cartSection) cartSection.style.display = "none";
-  });
-}
+closeCartBtn.addEventListener("click", () => (cartSection.style.display = "none"));
+
 
 // ---------------- Checkout + WhatsApp ----------------
 const WHATSAPP_NUMBER = "94788878668";
@@ -314,28 +322,32 @@ const WHATSAPP_NUMBER = "94788878668";
 function openCheckoutForm(cartItems, total) {
   const formOverlay = document.createElement("div");
   formOverlay.classList.add("checkout-overlay");
-  formOverlay.style.cssText = "position:fixed;inset:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:9999;padding:20px;";
 
   formOverlay.innerHTML = `
-    <div class="checkout-form" style="background:#fff;padding:18px;border-radius:10px;max-width:480px;width:100%;box-shadow:0 6px 24px rgba(0,0,0,0.15);">
-      <h2 style="margin-top:0">Confirmation</h2>
-      <label style="display:block;margin-top:8px;">Name*</label>
-      <input type="text" id="custName" required style="width:100%;padding:8px;border:1px solid #ddd;border-radius:6px;">
-      <label style="display:block;margin-top:8px;">Address*</label>
-      <textarea id="custAddress" required style="width:100%;padding:8px;border:1px solid #ddd;border-radius:6px;"></textarea>
-      <label style="display:block;margin-top:8px;">Contact Number*</label>
-      <input type="tel" id="custPhone" required style="width:100%;padding:8px;border:1px solid #ddd;border-radius:6px;">
-      <label style="display:block;margin-top:8px;">Email*</label>
-      <input type="email" id="custEmail" required style="width:100%;padding:8px;border:1px solid #ddd;border-radius:6px;">
-      <label style="display:block;margin-top:8px;">Payment Method*</label>
-      <div class="payment-options" style="margin-top:6px;">
-        <label style="margin-right:10px;"><input type="radio" name="payment" value="Cash on Delivery" checked> Cash on Delivery</label>
-        <label><input type="radio" name="payment" value="Bank Transfer"> Bank Transfer</label>
-      </div>
-      <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:12px;">
-        <button id="confirmOrderBtn" style="padding:8px 12px;border-radius:8px;border:none;background:#27ae60;color:#fff;cursor:pointer;">Confirm</button>
-        <button id="cancelOrderBtn" class="cancel" style="padding:8px 12px;border-radius:8px;border:none;background:#bdc3c7;color:#fff;cursor:pointer;">Cancel</button>
-      </div>
+    <div class="checkout-form">
+      <h2>Confirmation</h2>
+      <label>Name*</label>
+      <input type="text" id="custName" required>
+      <label>Address*</label>
+      <textarea id="custAddress" required></textarea>
+      <label>Contact Number*</label>
+      <input type="tel" id="custPhone" required>
+      <label>Email*</label>
+      <input type="email" id="custEmail" required>
+      <label>Payment Method*</label>
+     <div class="payment-options" style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px;">
+  <label style="display: flex; justify-content: space-between; align-items: center;">
+    <span>Cash on Delivery</span>
+    <input type="radio" name="payment" value="Cash on Delivery" checked>
+  </label>
+
+  <label style="display: flex; justify-content: space-between; align-items: center;">
+    <span>Bank Transfer</span>
+    <input type="radio" name="payment" value="Bank Transfer">
+  </label>
+</div> 
+      <button id="confirmOrderBtn">Confirm</button>
+      <button id="cancelOrderBtn" class="cancel">Cancel</button>
     </div>
   `;
 
@@ -385,42 +397,45 @@ ${itemsText}
   };
 }
 
-if (checkoutBtn) {
-  checkoutBtn.addEventListener("click", () => {
-    const total = cart.reduce((s, it) => s + (parseFloat(it.price) || 0) * (parseInt(it.qty) || 1), 0);
-    if (cart.length === 0) {
-      alert("Your cart is empty.");
-      return;
-    }
-    // pass a shallow copy to avoid accidental mutation
-    openCheckoutForm(JSON.parse(JSON.stringify(cart)), total);
+checkoutBtn.addEventListener("click", () => {
+  const cartItems = [];
+  document.querySelectorAll("#cartItems div").forEach(itemEl => {
+    const text = itemEl.querySelector("span").textContent;
+    const name = text.split(" (")[0];
+    const price = parseFloat(text.replace(/[^\d.]/g, "")) || 0;
+    cartItems.push({ name, qty: 1, price });
   });
-}
 
-// ---------------- Product Buttons (Add to cart / Order now) ----------------
-document.addEventListener("click", (e) => {
-  // Add to Cart
-  if (e.target.classList && e.target.classList.contains("add-to-cart-btn")) {
-    const card = e.target.closest(".product-card");
-    if (!card) return;
-    const qtyInput = card.querySelector(".product-qty");
-    const qty = qtyInput ? (parseInt(qtyInput.value) || 1) : 1;
-    const priceEl = card.querySelector(".product-price");
-    const price = priceEl ? parseFloat(priceEl.getAttribute("data-price")) || 0 : 0;
-    const name = card.querySelector(".product-name") ? card.querySelector(".product-name").textContent : "Product";
-    addToCart({ name, price, qty });
+  const totalText = document.getElementById("cartTotal").textContent.replace(/[^\d.]/g, "");
+  const total = parseFloat(totalText) || 0;
+
+  if (cartItems.length === 0) {
+    alert("Your cart is empty.");
+    return;
   }
 
-  // Order Now — open checkout for single product
-  if (e.target.classList && e.target.classList.contains("order-now-btn")) {
-    const card = e.target.closest(".product-card");
-    if (!card) return;
-    const qtyInput = card.querySelector(".product-qty");
-    const qty = qtyInput ? (parseInt(qtyInput.value) || 1) : 1;
-    const priceEl = card.querySelector(".product-price");
-    const price = priceEl ? parseFloat(priceEl.getAttribute("data-price")) || 0 : 0;
-    const name = card.querySelector(".product-name") ? card.querySelector(".product-name").textContent : "Product";
-    const product = { name, price, qty };
-    openCheckoutForm([product], (price * qty));
-  }
+  openCheckoutForm(cartItems, total);
+});
+
+// ---------------- Product Buttons ----------------
+document.addEventListener("DOMContentLoaded", () => {
+  document.addEventListener("click", (e) => {
+    if (e.target.classList.contains("add-to-cart-btn")) {
+      const card = e.target.closest(".product-card");
+      const product = {
+        name: card.querySelector("h3").textContent,
+        price: parseFloat(card.querySelector(".product-price").textContent.replace("Price:", "").replace("Rs.", "").trim()) || 0,
+      };
+      addToCart(product);
+    }
+
+    if (e.target.classList.contains("order-now-btn")) {
+      const card = e.target.closest(".product-card");
+      const product = {
+        name: card.querySelector("h3").textContent,
+        price: parseFloat(card.querySelector(".product-price").textContent.replace("Price:", "").replace("Rs.", "").trim()) || 0,
+      };
+      openCheckoutForm([product], product.price);
+    }
+  });
 });

@@ -38,7 +38,16 @@
       <div class="grid">
         <input type="text" id="productName" placeholder="Product Name *" required>
         <input type="number" id="productPrice" placeholder="Price (Rs.0.00) *" required>
-        <input type="text" id="productCategory" placeholder="Category *" required>
+        <label>Category</label>
+<select  value="Accessories">Accessories></option>
+</select>
+<seect id="productCategory">
+  <option value="">-- Select Category --</option>
+  <option value="Notebooks">Notebooks</option>
+  <option value="Writing Instruments">Writing Instruments</option>
+  <option value="Color & Arts">Color & Arts</option>
+  <option value="Paper Products">Paper Products</option>
+  
         <input type="file" id="productImage" accept="image/*">
       </div>
       <textarea id="productDescription" placeholder="Enter product description"></textarea>
@@ -90,18 +99,78 @@
     </div>
   </section>
 
-   <!-- PRODUCT SECTION -->
- <div> <section id="product" class="product-section">
-    <h2>Our Products</h2>
 
-<div class="product-list">
-  <p class="in-stock">In Stock</p>
-<p class="out-of-stock">Out of Stock</p>
-<input type="number" class="qty-input" value="1" min="1">
+  <!-- CATEGORY SECTION -->
 
 
+
+<section id="categories" class="category-section">
+  <h2 class="section-title">Choose by Category</h2>
+  <div class="category-list"></div>
+
+  
+
+    <!-- Category Card -->
+    <div class="category-card" style="--card-color:#f9d74c;">
+      <div class="category-info">
+        <h3>Notebooks</h3>
+        <p>Stylish & Premium</p>
+      </div>
+      <div class="category-img">
+        <img src="book.jpg" alt="Notebooks">
+      </div>
+    </div>
+
+    <div class="category-card" style="--card-color:#68e0cf;">
+      <div class="category-info">
+        <h3>Writing Instruments</h3>
+        <p>Pens, Pencils & More</p>
+      </div>
+      <div class="category-img">
+        <img src="pen.jpg" alt="Writing Instruments">
+      </div>
+    </div>
+
+    <div class="category-card" style="--card-color:#ff9a9e;">
+      <div class="category-info">
+        <h3>Color & Arts</h3>
+        <p>Colors, Brushes & Tools</p>
+      </div>
+      <div class="category-img">
+        <img src="color.jpg" alt="Color & Arts">
+      </div>
+    </div>
+
+    <div class="category-card" style="--card-color:#c7ceea;">
+      <div class="category-info">
+        <h3>Paper Products</h3>
+        <p>Sheets, Folders & More</p>
+      </div>
+      <div class="category-img">
+        <img src="paper.jpg" alt="Paper Products">
+      </div>
+    </div>
+
+    <div class="category-card" style="--card-color:#f6abb6;">
+      <div class="category-info">
+        <h3>Accessories</h3>
+        <p>Stationery Extras</p>
+      </div>
+      <div class="category-img">
+        <img src="tools.jpg" alt="Accessories">
+      </div>
+    </div>
 </div>
- 
+  
+
+</section>
+
+
+   <!-- PRODUCT SECTION -->
+  <section id="product" class="product-section">
+    <h2 class="phead">Choose Our Products</h2>
+    <div id="product-list" class="product-list"></div>
+  </section>
 
  <!-- ABOUT SECTION -->
     <section id="aboutus" class="section about-section">
@@ -189,23 +258,19 @@
 </div>
 </footer>
 <!-- Mobile Bottom Nav -->
-<nav class="bottom-nav">
-  <a href="#hero" class="nav-item">
-    <span class="icon">🏠</span>
-    <span class="text">Home</span>
-  </a>
-  <a href="#product" class="nav-item">
-    <span class="icon">📦</span>
-    <span class="text">Products</span>
-  </a>
-  <a href="#aboutus" class="nav-item">
-    <span class="icon">ℹ️</span>
-    <span class="text">About Us</span>
-  </a>
-  <a href="#contact" class="nav-item">
-    <span class="icon">📞</span>
-    <span class="text">Contact</span>
-  </a>
+<!-- Font Awesome for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+<nav class="navbar">
+  <div class="logo">Stationery Store</div>
+  <ul class="nav-links">
+    <li><a href="#hero"><i class="fa-solid fa-house"></i> <span>Home</span></a></li>
+    <li><a href="#aboutus"><i class="fa-solid fa-user-group"></i> <span>About Us</span></a></li>
+    <li><a href="#categories"><i class="fa-solid fa-heart" style="color:#ff4b5c;"></i> <span>Category</span></a></li>
+    <li><a href="#product"><i class="fa-solid fa-box-open"></i> <span>Products</span></a></li>
+    <li><a href="#contact"><i class="fa-solid fa-phone"></i> <span>Contact</span></a></li>
+    
+  </ul>
 </nav>
 
 <!-- Supabase client (no need for import) -->
