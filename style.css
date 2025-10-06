@@ -15,7 +15,7 @@ body {
 /* ===================== Header ===================== */
 .header {
   position: sticky;
-  top: 0;
+  padding-top: 10px;
   width: 100%;
   background: rgba(4, 4, 4, 0.74);
   
@@ -31,10 +31,12 @@ body {
 .header .logo img {
   width: 44px;
   height: 44px;
-  border-radius: 12px;
+  border-radius: 8px;
   object-fit: cover;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.5);
   transition: transform 0.3s;
+  overflow: visible;
+  box: sizing 1px;;
+  padding-top: 20px;
 }
 .header .logo img:hover {
   transform: rotate(-6deg) scale(1.05);
@@ -152,7 +154,8 @@ header {
 header .logo img {
   width: 44px;
   height: 44px;
-  border-radius: 12px;
+  
+  
 }
 header nav {
   display: flex;
@@ -180,28 +183,6 @@ header nav a:hover::after {
 /* Hide header nav on mobile */
 @media (max-width: 768px) {
   header nav { display: none; }
-}
-
-
-/* ========== Base Styles ========== */
-:root {
-  --accent-1: #6b2dd8;
-  --accent-2: #ff8ab6;
-  --bg: #fff7fb;
-}
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-.body {
-  font-family: "Poppins", sans-serif;
- background: linear-gradient(to right, rgb(6, 215, 27),white);
-  color: #2a1f2f;
-  line-height: 1.5;
-  padding: 0;
 }
 
 /* ---------- General Layout ---------- */
@@ -447,36 +428,9 @@ background: linear-gradient(to right, rgb(247, 249, 248),rgb(253, 190, 123));
   margin-top: 20px;
   border-radius: 12px;
   box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+
 }
 
-/* ========== Responsive for larger screens ========== */
-@media (min-width: 768px) {
-  .hero {
-    flex-direction: row;
-    justify-content: space-between;
-    text-align: left;
-    padding: 80px;
-  }
-
-  .hero-content {
-    flex: 1;
-    padding-right: 30px;
-  }
-
-  .hero-title {
-    font-size: 2.8rem;
-  }
-
-  .hero-tagline {
-    font-size: 1.2rem;
-  }
-
-  .hero-image img {
-    max-width: 380px;
-    margin-top: 0;
-    height: auto;
-  }
-}
 
 /* Category Section */
 .category-section {
