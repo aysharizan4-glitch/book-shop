@@ -906,7 +906,7 @@ footer .footer-bottom {
   align-items: center;
   justify-content: center;
   z-index: 9999;
-  padding: 20px;
+  padding: 15px;
 }
 
 .checkout-form {
@@ -1066,7 +1066,7 @@ footer .footer-bottom {
   bottom: 0;
   left: 0;
   width: 100%;
-  background: linear-gradient(to top, rgb(250, 249, 249),rgb(249, 249, 251));
+  background: linear-gradient(to top, rgb(254, 144, 1),rgb(249, 249, 251));
   box-shadow: 0 -3px 12px rgba(0, 0, 0, 0.15);
   border-top: 1px solid #0f0f0f;
   display: flex;
