@@ -331,7 +331,7 @@ header nav a:hover::after {
   background: url("all.jpg");
   border-radius: 16px;
   box-shadow: 0 4px 14px rgba(0,0,0,0.08);
-  padding: 25px 33%;
+  padding: 25px 30%;
   
   display: ruby-base-container;
   
