@@ -666,84 +666,99 @@ footer .footer-bottom {
   opacity: 0.9;
 }
 
-/* ---------- BOTTOM NAVBAR (Mobile Only) ---------- */
 /* ---------- BOTTOM NAVBAR ---------- */
+/* ---------- BOTTOM NAVBAR: perfectly balanced ---------- */
 .navbar {
   position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
+  bottom: 12px;        /* slightly lifted for a floating look */
+  left: 20px;          /* equal left margin */
+  right: 20px;         /* equal right margin */
   background: #ffffff;
-  border-top: 1px solid #e0e0e0;
-  box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e6e6e6;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.10);
+  border-radius: 16px;
   z-index: 9999;
+  padding: 10px 12px 20px; /* top, small left-right padding inside, bottom = 20px */
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 8px 0 25px;
-  
 }
 
+/* container for the links: central column with max-width */
 .navbar .nav-links {
   display: flex;
-  justify-content: space-around;
-  align-items: center;
   width: 100%;
-  max-width: 500px;
+  max-width: 600px;   /* controls how wide the centered group becomes on larger phones */
+  gap: 6px;            /* small gap between items */
+  align-items: center;
 }
 
+/* Each list item takes equal space */
 .navbar .nav-links li {
   list-style: none;
-  flex: 1;
-  text-align: center;
+  flex: 1 1 0;        /* equal-width columns for each item */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
+/* Anchor centered inside each column */
 .navbar .nav-links a {
   text-decoration: none;
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-size: 0.78rem;
-  font-weight: 600;
+  gap: 3px;
+  width: 100%;
+  padding: 6px 4px;
+  box-sizing: border-box;
   color: #333;
-  transition: all 0.3s ease;
+  font-weight: 600;
+  font-size: 0.78rem;
+  transition: transform 0.18s ease, color 0.18s ease;
 }
 
+/* Icon styling */
 .navbar .nav-links a i {
-  font-size: 1.4rem;
-  margin-bottom: 3px;
+  font-size: 1.35rem;
+  line-height: 1;
+  transition: transform 0.18s ease, color 0.18s ease;
   color: #007bff;
-  transition: transform 0.3s ease, color 0.3s ease;
 }
 
+/* Label */
 .navbar .nav-links a span {
-  font-size: 0.75rem;
+  font-size: 0.72rem;
+  line-height: 1;
 }
 
+/* Hover & active */
+.navbar .nav-links a:hover {
+  transform: translateY(-4px);
+  color: #0056b3;
+}
 .navbar .nav-links a:hover i {
-  transform: translateY(-3px);
+  transform: translateY(-4px);
   color: #0056b3;
 }
 
+.navbar .nav-links a.active,
 .navbar .nav-links a.active i,
 .navbar .nav-links a.active span {
   color: #0056b3;
 }
 
-/* Add small shadow pulse effect for active item */
+/* small pulse on active icon (optional) */
 .navbar .nav-links a.active i {
-  animation: pulse 1.2s infinite;
+  animation: pulse 1.4s infinite;
 }
-
 @keyframes pulse {
-  0% { text-shadow: 0 0 0px rgba(0, 123, 255, 0.6); }
-  50% { text-shadow: 0 0 8px rgba(0, 123, 255, 0.8); }
-  100% { text-shadow: 0 0 0px rgba(0, 123, 255, 0.6); }
+  0%   { text-shadow: 0 0 0 rgba(0,123,255,0.35); }
+  50%  { text-shadow: 0 0 8px rgba(0,123,255,0.6); }
+  100% { text-shadow: 0 0 0 rgba(0,123,255,0.35); }
 }
 
-/* Hide navbar on larger screens */
+/* Hide navbar on desktop */
 @media (min-width: 769px) {
-  .navbar {
-    display: none;
-  }
+  .navbar { display: none; }
 }
