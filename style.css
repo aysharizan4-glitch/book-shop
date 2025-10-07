@@ -277,8 +277,9 @@ header nav a:hover::after {
 
 /* ---------- CATEGORY SECTION ---------- */
 .category-section {
-  padding: 60px 20px;
+  padding: 60px 25px;
   background: linear-gradient(120deg, #fefcfb, #fff7ec);
+  
 }
 .category-section .section-title {
   text-align: center;
@@ -330,10 +331,10 @@ header nav a:hover::after {
   background: url("all.jpg");
   border-radius: 16px;
   box-shadow: 0 4px 14px rgba(0,0,0,0.08);
-  padding: 30px 120px;
-  display: flex;
-  align-items: center;
-  gap: 15px;
+  padding: 25px 33%;
+  
+  display: ruby-base-container;
+  
   transition: transform 0.3s ease, box-shadow;
   font-size: xx-large; ruby-position: before;
   padding-bottom: 10px;
