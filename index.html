@@ -1,283 +1,474 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>AYSHLYNE Stationery</title>
- <!-- External CSS -->
-  <link rel="stylesheet" href="style.css" />
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AYSH_LYNE</title>
+<meta name="description" content="Modern, accessible e-commerce HTML template — semantic structure, product grid, cart, and components ready for CSS & JavaScript." />
+<!-- Link to external stylesheet (will be created next) -->
+<link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-<!-- Header -->
-  <header class="header">
-    <div class="logo">
-      <img src="aysh logo.jpg" alt="Logo">
-    </div>
-    <h1 class="title">AYSHLYNE</h1>
- <nav>
-      <ul>
-        <li><a href="#hero">Home</a></li>
-        <li><a href="#product">Products</a></li>
-        <li><a href="#aboutus">About Us</a></li>
-        <li><a href="#contact">Contact</a></li>
-      </ul>
-    </nav>
-    <div class="header-icons">
-      <span class="cart">🛒</span>
-     </header>
 
-<!-- ADMIN PANEL (only one copy) -->
-  <section class="form-section" style="display:none;">
-    <button id="closeAdminBtn" class="btn">Close Admin Panel</button>
+  <!-- =========================
+       HEADER — Sudu Araliya
+       ========================= -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="#" class="logo">
+        <img src="aysh logo.jpg" alt="Sudu Araliya logo" class="logo-img" />
+        <span class="brand-name">AYSH<span class="highlight">_LYNE</span></span>
+      </a>
 
-    <h2>Product Management</h2>
-    <form id="productForm">
-      <div class="grid">
-        <input type="text" id="productName" placeholder="Product Name *" required>
-        <input type="number" id="productPrice" placeholder="Price (Rs.0.00) *" required>
+      <nav class="main-nav">
+        <ul class="nav-list">
+          <li><a href="#home" class="nav-link active">Home</a></li>
+          <li><a href="#collections" class="nav-link">Collections</a></li>
+          <li><a href="#aboutus" class="nav-link">About Us</a></li>
+          <li><a href="#contact" class="nav-link">Contact</a></li>
+        </ul>
+      </nav>
 
-<label for="productCategory">Category</label>
-<select id="productCategory" required>
-  <option value="">-- Select Category --</option>
-  <option value="Notebooks">Notebooks</option>
-  <option value="Writing Instruments">Writing Instruments</option>
-  <option value="Color & Arts">Color & Arts</option>
-  <option value="Paper Products">Paper Products</option>
-  <option value="Accessories">Accessories</option>
-</select>
-  <input type="file" id="productImage" accept="image/*">
+      <div class="header-actions">
+        <button class="cart-btn" aria-label="View cart">
+          🛒<span class="cart-count">0</span>
+        </button>
       </div>
-      <textarea id="productDescription" placeholder="Enter product description"></textarea>
-      <label>
-        <input type="checkbox" id="inStock" checked> In Stock
-      </label>
-      <label>
-        <input type="checkbox" id="featured"> Featured Product
-      </label>
-      <button type="submit" class="btn">+ Add / Save Product</button>
-    </form>
+    </div>
+  </header>
 
-    <h3>Admin Product List</h3>
-    <div class="admin-product-list"></div>
-  </section>
-
-
-  <!-- cart section -->
-<section id="cartSection" style="display:none; padding:20px;">
-  <h2>🛒 Your Cart</h2>
-  <div id="cartItems"></div>
-  <h3 id="cartTotal"></h3>
-  <button id="checkoutBtn" style="padding:10px 15px;background:#28a745;color:#fff;border:none;border-radius:5px;cursor:pointer;">
-    Checkout
-  </button>
-  <button id="closeCartBtn" style="padding:10px 15px;background:#fbf7f7;color:#0d0b0b;border:none;border-radius:5px;cursor:pointer;">
-    Close
-  </button>
-</section>
-
-
-   <!-- hero SECTION -->
-
-  <section id="hero" class="hero">
-    <div class="hero-content">
-      <h1 class="hero-title">AYSHLYNE Stationery</h1>
-      <p class="hero-tagline">✨ Stationery That inspires Brilliance ✨</p>
-      <p class="hero-text">
+<!-- =========================
+     HERO SECTION — Sudu Araliya
+     ========================= -->
+<section class="hero-section" id="home">
+  <div class="hero-content">
+    <h1 class="hero-title">AYSH<span class="accent">_LYNE</span></h1>
+    <h2 class="hero-subtitle">✨ Stationery That inspires Brilliance ✨</h2>
+    <p class="hero-text">
         Discover Elegant Notebooks, Playful Pens, and Stylish Desk Essentials.  
         At <strong>AYSHLYNE</strong>, We Blend Creativity and Quality to Making Every idea Shine.
       </p>
-      <div class="hero-buttons">
-        <a href="#product" class="btn primary">Shop Now</a>
-        <a href="#product" class="btn secondary">Explore</a>
+    <a href="#collections" class="btn-buy">Choose By Categories</a>
+  </div>
+</section>
+<!-- =========================
+     CATEGORY SECTION — Sudu Araliya
+     ========================= -->
+<section class="category-section" id="collections">
+  <h2 class="section-title">Shop by Category</h2>
+
+  <div class="category-grid">
+    <!-- Mixed Collection -->
+    <a href="#shop" class="category-card">
+      <img src="all.jpg" alt="Mixed Collection" />
+      <div class="category-info">
+        <h3>Mixed Collection</h3>
       </div>
-    </div>
-    <div class="hero-image">
-      <img src="hom image.jpg" alt="AYSHLYNE Stationery Products">
-    </div>
-  </section>
+    </a>
 
-
-  <!-- CATEGORY SECTION -->
-<section id="categories" class="category-section">
-  <h2 class="section-title">Choose by Category</h2>
-  <div class="category-list"></div>
-
-  <div class="category-actions">
-  <button id="showAllBtn" class="show-all-btn">Show All</button>
-</div>
-
-
-    <!-- Category Card -->
-    <div class="category-card" style="--card-color:#f9d74c;">
+    <!-- Frocks -->
+    <a href="#shop" class="category-card">
+      <img src="book2.jpg" alt="Frocks" />
       <div class="category-info">
         <h3>Notebooks</h3>
         <p>Stylish & Premium</p>
       </div>
-      <div class="category-img">
-        <img src="book2.jpg" alt="Notebooks">
-      </div>
-    </div>
+    </a>
 
-    <div class="category-card" style="--card-color:#68e0cf;">
+    <!-- Blouses -->
+    <a href="#shop" class="category-card">
+      <img src="pen1.jpg" alt="Blouses" />
       <div class="category-info">
-        <h3>Writing Instruments</h3>
+         <h3>Writing Instruments</h3>
         <p>Pens, Pencils & More</p>
       </div>
-      <div class="category-img">
-        <img src="pen1.jpg" alt="Writing Instruments">
-      </div>
-    </div>
+    </a>
 
-    <div class="category-card" style="--card-color:#ff9a9e;">
+    <!-- Skirts -->
+    <a href="#shop" class="category-card">
+      <img src="color1.jpg" alt="Skirts" />
       <div class="category-info">
-        <h3>Color & Arts</h3>
-        <p>Colors, Brushes & Tools</p>
+       <h3>Color & Arts</h3>
+        <p>Colors, Brushes & Tools</p>  
       </div>
-      <div class="category-img">
-        <img src="color1.jpg" alt="Color & Arts">
-      </div>
-    </div>
+    </a>
 
-    <div class="category-card" style="--card-color:#c7ceea;">
+    <!-- Denim Jeans -->
+    <a href="#shop" class="category-card">
+      <img src="paper1.jpg" alt="Denim Jeans" />
       <div class="category-info">
-        <h3>Paper Products</h3>
+       <h3>Paper Products</h3>
         <p>Sheets, Folders & More</p>
       </div>
-      <div class="category-img">
-        <img src="paper1.jpg" alt="Paper Products">
-      </div>
-    </div>
+    </a>
 
-    <div class="category-card" style="--card-color:#f6abb6;">
+    <!-- Leggings and Palazzo Bottoms -->
+    <a href="#shop" class="category-card">
+      <img src="tools1.jpg" alt="Leggings and Palazzo Bottoms" />
       <div class="category-info">
         <h3>Accessories</h3>
         <p>Stationery Extras</p>
       </div>
-      <div class="category-img">
-        <img src="tools1.jpg" alt="Accessories">
-      </div>
-    </div>
-</div>
-  
-
+    </a>
+  </div>
 </section>
 
+  <!-- ========================= PRODUCT SECTION (demo) — Sudu Araliya ========================= -->
 
-   <!-- PRODUCT SECTION -->
-  <section id="product" class="product-section">
-    <h2 class="phead">Choose Our Products</h2>
-    <div id="product-list" class="product-list"></div>
-  </section>
+    <div class="product-grid">
+            <!-- Product Card 1 -->
+  <div class="product-card">
+ <div class="badge-stock">Out of stock</div>
+ <img src="frock.jpg" alt="Product 1" class="product-img">
+   <div class="product-info"> 
+  <h3 class="brand">Beverly Hills Polo Club</h3>
+   <div class="price-section">
+    <p class="new-price">LKR 1890.00</p> 
+    <p class="old-price">LKR 4525.00</p>
+     <div class="discount-badge">45% OFF</div> 
+       </div>
+   <p class="desc">Beverly Hills Polo Club Printed Cotton Top</p>
+   </div>
+    <button class="view-detail">View Details</button> 
+  </div> 
 
- <!-- ABOUT SECTION -->
-    <section id="aboutus" class="section about-section">
-      <div class="container">
-        <h2 class="section-title">About AYSHLYNE</h2>
-        <p class="section-subtitle">Founded With a Passion For Quality Stationery, AYSHLYNE Has Been Serving Students, Professionals, and Creative individuals With Premium Products That inspire Productivity and Creativity.</p>
-<div class="story-card">
-          <h3>Our Story</h3>
-          <p>AYSHLYNE Began as a Small Passion Project, Born From The Belief That Quality Stationery Can Transform How We Work, Learn, and Express Ourselves. What Started as a Local Store Has Grown into a Trusted Online Destination For Stationery Enthusiasts.</p>
+        <!-- Product Card 2 -->
+ <div class="product-card"> 
+ <div class="badge-stock">In stock</div> 
+<img src="jeans.jpg" alt="Product 2" class="product-img">
+<div class="discount-badge">30% OFF</div>
+ <div class="product-info">
+ <h3 class="brand">Bigdart</h3> 
+ <div class="price-section">
+<p class="new-price">LKR 2950.00</p> 
+<p class="old-price">LKR 5415.00</p>
+ </div> 
+ <p class="desc">Bigdart Floral Print Viscose Top</p> 
+</div> 
+  <button class="view-detail"> View Details </button>
+    </div>
 
-          <div class="mission-box">
-            <h4>Our Mission</h4>
-            <p>To Provide Exceptional Stationery Products That Empower Creativity, Enhance Productivity, and Bring Joy to Everyday Tasks Through Thoughtful Design and Premium Quality.</p>
-          </div>
+         <!-- Product Card 3 -->
+  <div class="product-card"> 
+<div class="badge-stock">Out Of stock</div> 
+  <img src="plazo.jpg" alt="Product 3" class="product-img">
+ <div class="discount-badge">45% OFF</div>
+  <div class="product-info">
+  <h3 class="brand">Beverly Hills Polo Club</h3>
+     <div class="price-section">
+<p class="new-price">LKR 3895.00</p> 
+<p class="old-price">LKR 6495.00</p>
+     </div>
+<p class="desc">Beverly Hills Polo Club Printed Cotton Top</p>
+ </div>
+  <button class="view-detail"> View Details </button> 
+  </div> 
 
-          <div class="features-grid">
-            <div class="feature">
-              <div class="icon">🏅</div>
-              <h5>Premium Quality</h5>
-              <p>We Source Only The Finest Materials and Partner With Trusted Manufacturers.</p>
-            </div>
-            <div class="feature">
-              <div class="icon">🤝</div>
-              <h5>Customer Focused</h5>
-              <p>Your Satisfaction is Our Priority With Excellent Support and Service.</p>
-            </div>
-            <div class="feature">
-              <div class="icon">🚚</div>
-              <h5>Fast Delivery</h5>
-              <p>Quick and Reliable Shipping With Multiple Delivery Options.</p>
-            </div>
-            <div class="feature">
-              <div class="icon">🔒</div>
+       <!-- Product Card 4 -->
+  <div class="product-card">
+   <div class="badge-stock">In stock</div> 
+ <img src="jeans.jpg" alt="Product 4" class="product-img"> 
+    <div class="discount-badge">30% OFF</div> 
+  <div class="product-info">
+  <h3 class="brand">Bigdart</h3> <div class="price-section">
+    <p class="new-price">LKR 3250.00 <p class="old-price">LKR 7650.00 </p>
+        </div> <p class="desc">Bigdart Floral Print Viscose Top</p>
+       </div>
+   <button class="view-detail"> View Details </button>
+  </div>
+ </div>
+              <!-- ======== ORDER PRODUCT (demo) — Sudu Araliya=========== -->
+<main class="container">
+  <section class="product-page">
+     <aside class="gallery"> <div class="main-image-wrap"> 
+    <img id="mainImage" class="main-image" src="jeans.jpg" alt="Product image" />
+     <button id="prevBtn" class="nav-btn prev">‹</button> 
+     <button id="nextBtn" class="nav-btn next">›</button>
+     </div> <div id="thumbs" class="thumbs" aria-hidden="false"></div>
+     </aside> <article class="details"> 
+      <h1 id="pName" class="p-name">Product name</h1>
+       <div class="sku" id="pSku">SKU: -</div>
+        <div class="price-row">
+           <div class="old-price" id="pOldPrice" style="display:none">LKR 0.00</div>
+     <div class="new-price" id="pNewPrice">LKR 0.00</div>
+      <div id="pDiscount" class="discount" style="display:none">-0%</div>
+     </div> <div id="pStock" class="stock in">In stock</div>
+      <div class="selectors"> 
+        <label>Size</label><select id="sizeSelect"></select> 
+      <label>Colour</label><select id="colorSelect"></select> 
+    <label>Quantity</label>
+     <div class="qty-row"> 
+      <button id="decQty" class="qty-btn">-</button>
+   <input id="qty" type="number" value="1" min="1" />
+    <button id="incQty" class="qty-btn">+</button>
+   </div> </div> <div class="actions"> 
+    <button class="add-cart-btn"> 🛒Add To Cart </button>
+     <button id="buyNow" class="BN btn-secondary">💳 Buy Now</button>
+     </div> <section class="desc"> <h3>Description</h3>
+       <p id="pDesc">—</p> 
+    </section>
+     <section class="related">
+         <h3>Related products</h3>
+     <div id="relatedGrid" class="related-grid"></div>
+     </section> 
+    </article>
+   </section> 
+  </main> 
+</section> 
+
+<!-- =========================
+     CONTACT SECTION — Sudu Araliya
+     ========================= -->
+<section class="contact-section" id="contact">
+  <h2 class="section-title">Contact Us</h2>
+
+  <div class="contact-info">
+    <div class="contact-item">
+      <h4>Phone</h4>
+      <p>078 887 8600</p>
+    </div>
+    <div class="contact-item">
+      <h4>Email</h4>
+      <p>rizanrs221@gmail.com</p>
+    </div>
+    <div class="contact-item">
+      <h4>Location</h4>
+      <p>Main Street, Matale, Sri Lanka</p>
+    </div>
+    <div class="contact-item">
+      <h4>Response Time</h4>
+      <p>Monday – Saturday, 9:00 AM – 7:00 PM</p>
+    </div>
+  </div>
+
+  <a
+    href="https://wa.me/94788878600"
+    target="_blank"
+    class="btn-whatsapp"
+  >
+    💬 Chat With Us On WhatsApp
+  </a>
+ 
+<!-- =========================
+     ABOUT SECTION — Sudu Araliya
+     ========================= -->
+<section id="aboutus" class="about-section">
+  <div class="container">
+    <h2 class="section-title">About AYSH_LYNE</h2>
+    <p class="section-subtitle">Founded With a Passion For Quality Stationery, AYSHLYNE Has Been Serving Students, Professionals, and Creative individuals With Premium Products That inspire Productivity and Creativity.</p>
+     
+    <div class="story-card">
+
+      <h3>Our Story</h3>
+       <strong>AYSH_LYNE</strong> Began as a Small Passion Project, Born From The Belief That Quality Stationery Can Transform How We Work, Learn,
+       and Express Ourselves. What Started as a Local Store Has Grown into a Trusted Online Destination For Stationery Enthusiasts.</p>
+
+      <div class="mission-box">
+        <h4>Our Mission</h4>
+        <p>To Provide Exceptional Stationery Products That Empower Creativity, Enhance Productivity, and Bring Joy to Everyday Tasks Through Thoughtful Design and Premium Quality.</p>
+          </div> 
+      </div>
+
+      <div class="features-grid">
+        <div class="feature">
+          <div class="icon">🏅</div>
+          <h5>Premium Quality</h5>
+         <p>We Source Only The Finest Materials and Partner With Trusted Manufacturers.</p>
+            </div> 
+
+        <div class="feature">
+         <div class="icon">🔒</div>
               <h5>Secure Shopping</h5>
               <p>We Protect Your Personal information With industry-Standard Security.</p>
             </div>
-          </div>
+
+        <div class="feature">
+          <div class="icon">🚚</div>
+          <h5>Fast Delivery</h5>
+          <p>Your favorite looks delivered quickly and safely to your doorstep.</p>
         </div>
 
+        <div class="feature">
+          <div class="icon">💖</div>
+          <h5>Customer Care</h5>
+     <p>Your Satisfaction is Our Priority With Excellent Support and Service.</p>
+      </div>
+
         <div class="why-choose">
-          <h3>Why Choose AYSHLYNE?</h3>
-          <p>At AYSHLYNE, We Believe That The Right Tools Can Make All The Difference. From The Moment You Browse Our Collection to The Day Your Order Arrives, We’re Dedicated to Providing Exceptional Service and Products You'll Love to Use Every Day.</p>
+          <h3>Why Choose AYSH_LYNE?</h3>
+          <p>At AYSH_LYNE, We Believe That The Right Tools Can Make All The Difference. From The Moment You Browse Our Collection to The Day Your Order Arrives, We’re Dedicated to Providing Exceptional Service and Products You'll Love to Use Every Day.</p>
+        </div>
+  </div>
+</section>
+
+<!-- =========================
+     FOOTER — Sudu Araliya
+     ========================= -->
+<footer class="site-footer">
+  <div class="footer-content">
+   
+    <h3>Stay Updated</h3>
+      <p>Subscribe to Get Updates On New Products and Special Offers.</p>    
+    <form class="subscribe-form">
+      <input
+        type="email"
+        placeholder="Enter your email"
+        required
+        class="subscribe-input"
+      />
+      <button type="submit" class="subscribe-btn">Subscribe</button>
+    </form>
+
+    <p class="footer-credit">
+      © <span id="year"></span> AYSH_LYNE — Designed & Developed with 💖
+    </p>
+  </div>
+  <!-- ADMIN PANEL TOGGLE BUTTON -->
+<button id="adminToggleBtn" class="admin-toggle-btn">
+  <span>⚙️</span> Admin Panel
+</button>
+</footer>
+
+  <!-- =========================
+       ADMIN PANEL SECTION
+       ========================= -->
+  <div class="admin-container">
+    <header class="admin-header">
+      <h2>🛍 Product Admin Panel</h2>
+      <button class="close-btn">Close</button>
+    </header>
+
+    <form class="product-form">
+      <div class="form-group">
+        <label>Name</label>
+        <input type="text" placeholder="Enter product name">
+      </div>
+
+      <div class="form-group">
+        <label>Discount Off (%)</label>
+        <input type="number" placeholder="0">
+      </div>
+
+      <div class="form-group">
+        <label>SKU No</label>
+        <input type="number" placeholder="Enter SKU number">
+      </div>
+
+      <div class="form-group">
+        <label>New Price (LKR)</label>
+        <input type="number" step="0.01" placeholder="0.00">
+      </div>
+
+      <div class="form-group">
+        <label>Old Price (LKR)</label>
+        <input type="number" step="0.01" placeholder="0.00">
+      </div>
+
+      <div class="form-group">
+        <label>Upload Images</label>
+        <input type="file" accept="image/*" multiple>
+      </div>
+<div class="form-group">
+   <label>Category</label> 
+   <select id="category"> 
+    <option>Notebooks</option> 
+    <option>Writing Instruments</option> 
+    <option>Color & Arts</option> 
+    <option>Paper Products</option> 
+    <option>Accessories</option> 
+  </select> 
+</div> 
+<div class="form-group"> 
+  <label>Sizes</label> 
+  <input type="text" placeholder="Enter size">
+ </div>
+
+ <div class="form-group">
+        <label>Colour</label>
+        <input type="text" placeholder="write the Colour">
+      </div>
+
+<div class="form-group">
+        <label>Stock Status</label>
+        <div class="radio-group">
+          <label><input type="radio" name="stock" checked> In Stock</label>
+          <label><input type="radio" name="stock"> Out of Stock</label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Description</label>
+        <textarea placeholder="Enter product description"></textarea>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="save-btn">Add / Save Product</button>
+      </div>
+    </form>
+
+      <div class="product-list">
+          </div>
+            <div button class="edit-btn">Edit</button>
+            <button class="delete-btn">Delete</button>
+          </div>
         </div>
       </div>
     </section>
-    
+  </div>
 
-  <!-- Contact Section -->
-  <section id="contact" class="contact-section">
-    <h2>Contact Us</h2>
-    <p>Have Questions About Our Products or Need Assistance? We're Here to Help! Reach Out to Us Through Any of The Channels Below.</p>
-    
-    <div class="contact-cards">
-      <div class="card"><strong>📞 Phone</strong><br>+94 788 878 668</div>
-      <div class="card"><strong>✉️ Email</strong><br>rizanrs221@gmail.com</div>
-      <div class="card"><strong📍 Location</strong><br>Warakamra, Matale, Sri Lanka.</div>
-      <div class="card"><strong>⏰ Business Hours</strong><br>Mon - Sat: 9:00 AM - 6:00 PM</div>
-    </div>
 
-    <a href="https://wa.me/94788878668" target="_blank" class="whatsapp-btn">💬 Chat With Us on WhatsApp</a>
 
-    
+<!-- =========================
+     BOTTOM NAVIGATION BAR (inline SVG icons)
+     ========================= -->
+<nav class="bottom-nav" role="navigation" aria-label="Mobile bottom navigation">
+  <a href="#home" class="nav-item active" aria-label="Home">
+    <!-- Home SVG -->
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
+      <path d="M3 11.5L12 4l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1V11.5z" fill="currentColor"/>
+    </svg>
+    <span>Home</span>
+  </a>
 
-  <!-- Footer -->
-  <footer>
-    <div class="footer-top">
-      <h3>Stay Updated</h3>
-      <p>Subscribe to Get Updates On New Products and Special Offers.</p>
-      <form class="subscribe-form">
-        <input class="mail" type="email" placeholder="Enter your email" required>
-        <button class="sbtn" type="submit">Subscribe</button>
-      </form>
-    </div>
+  <a href="#aboutus" class="nav-item" aria-label="About us">
+    <!-- Info SVG -->
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
+      <path d="M12 2a10 10 0 1 0 .001 20.001A10 10 0 0 0 12 2zm1 15v-6h-2v6h2zm0-8V7h-2v2h2z" fill="currentColor"/>
+    </svg>
+    <span>About</span>
+  </a>
 
-    <div class="footer-contact">
-      <p>📞 +94 788 878 668</p>
-      <p>✉️ rizanrs221@gmail.com</p>
-      <p>📍 Warakamura, Matale, Sri Lanka.</p>
-    </div>
-    
-  <div class="footer-bottom">
-      <p>© 2024 AYSHLYNE. All rights reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
-      <p>Designed and Developed with ❤️ For Stationery Lovers Everywhere</p>
-      <button id="adminBtn" class="btn">Admin</button>
-</div>
-</footer>
-<!-- Mobile Bottom Nav -->
-<!-- Font Awesome for icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  <a href="#collections" class="nav-item" aria-label="Categories">
+    <!-- Grid / Categories SVG -->
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
+      <path d="M3 3h8v8H3V3zm10 0h8v8h-8V3zM3 13h8v8H3v-8zm10 10h8v-8h-8v8z" fill="currentColor"/>
+    </svg>
+    <span>Category</span>
+  </a>
 
-<nav class="navbar">
-  <ul class="nav-links">
-    <li><a href="#hero"><i class="fa-solid fa-house"></i> <span>Home</span></a></li>
-    <li><a href="#aboutus"><i class="fa-solid fa-user-group"></i> <span>About Us</span></a></li>
-    <li><a href="#categories"><i class="fa-solid fa-heart" style="color:#130843;"></i> <span>Category</span></a></li>
-    <li><a href="#product"><i class="fa-solid fa-box-open"></i> <span>Products</span></a></li>
-    <li><a href="#contact"><i class="fa-solid fa-phone"></i> <span>Contact</span></a></li>
-  </ul>
+  <a href="#contact" class="nav-item" aria-label="Contact">
+    <!-- Phone / Contact SVG -->
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
+      <path d="M6.6 10.2a15.05 15.05 0 0 0 7.2 7.2l2.0-2.0a1 1 0 0 1 1.0-.24c1.12.37 2.33.57 3.56.57a1 1 0 0 1 1 1v3.5a1 1 0 0 1-1 1A18 18 0 0 1 3 6.5a1 1 0 0 1 1-1H7.5a1 1 0 0 1 1 1c0 1.23.2 2.44.57 3.56a1 1 0 0 1-.24 1.0l-2.23 2.14z" fill="currentColor"/>
+    </svg>
+    <span>Contact</span>
+  </a>
 </nav>
 
-<!-- Supabase client (no need for import) -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
- <!-- Cart Section -->
 
 
-  
+
+<!-- =========================
+     SCRIPTS — Sudu Araliya
+     ========================= -->
+
+<!-- Supabase Client -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.6/dist/umd/supabase.min.js"></script>
+
+<!-- Main App Logic -->
 <script src="script.js"></script>
 
 </body>
+</html>
 
