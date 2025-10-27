@@ -1475,3 +1475,78 @@
   font-weight: 500;
 }
 
+/* ===============================
+   BOTTOM NAVIGATION BAR — AYSH_LYNE
+================================= */
+
+.bottom-nav {
+  position: fixed;
+  bottom: 20px; /* your requested margin */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 92%;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(15px);
+  border-radius: 20px;
+  box-shadow: 0 8px 20px rgba(0, 120, 255, 0.25);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 10px 0;
+  z-index: 999;
+  transition: all 0.3s ease;
+}
+
+/* Nav Items */
+.bottom-nav .nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #0078ff;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.bottom-nav .nav-item svg {
+  margin-bottom: 4px;
+  width: 22px;
+  height: 22px;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.bottom-nav .nav-item:hover svg,
+.bottom-nav .nav-item.active svg {
+  transform: scale(1.2);
+  color: #00bcd4;
+}
+
+.bottom-nav .nav-item:hover,
+.bottom-nav .nav-item.active {
+  color: #00bcd4;
+  text-shadow: 0 0 10px rgba(0, 188, 212, 0.6);
+}
+
+/* ===============================
+   RESPONSIVE BEHAVIOR
+================================= */
+
+/* Hide bottom nav on desktop */
+@media (min-width: 769px) {
+  .bottom-nav {
+    display: none;
+  }
+}
+
+/* Mobile view adjustments */
+@media (max-width: 768px) {
+  .bottom-nav {
+    width: 90%;
+    padding: 12px 0;
+  }
+
+  .bottom-nav .nav-item span {
+    font-size: 0.8rem;
+  }
+}
