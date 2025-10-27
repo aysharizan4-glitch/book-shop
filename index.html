@@ -38,9 +38,89 @@
     </div>
   </header>
 
+ 
+  <!-- =========================
+       ADMIN PANEL SECTION
+       ========================= -->
+  <div class="admin-container">
+<header class="admin-header">
+<h2>🛍 Product Admin Panel</h2> 
+<button class="close-btn">Close</button>
+    </header>
+ <form class="product-form">
+<div class="form-group">
+ <label>Name</label>
+ <input type="text" placeholder="Enter product name">
+      </div>
+ <div class="form-group">
+        <label>Discount Off (%)</label>
+        <input type="number" placeholder="0">
+      </div>
+
+      <div class="form-group">
+        <label>SKU No</label>
+        <input type="number" placeholder="Enter SKU number">
+      </div>
+
+      <div class="form-group">
+        <label>New Price (LKR)</label>
+        <input type="number" step="0.01" placeholder="0.00">
+      </div>
+
+      <div class="form-group">
+        <label>Old Price (LKR)</label>
+        <input type="number" step="0.01" placeholder="0.00">
+   </div>
+<div class="form-group">
+<label>Upload Images</label>
+<input type="file" accept="image/*" multiple>
+ </div>
+<div class="form-group">
+   <label>Category</label> 
+   <select id="category"> 
+    <option>Notebooks</option> 
+    <option>Writing Instruments</option> 
+    <option>Color & Arts</option> 
+    <option>Paper Products</option> 
+    <option>Accessories</option> 
+  </select> 
+</div> 
+<div class="form-group"> 
+  <label>Sizes</label> 
+  <input type="text" placeholder="Enter size">
+ </div>
+<div class="form-group">
+<label>Colour</label>
+<input type="text" placeholder="write the Colour">
+  </div>
+<div class="form-group">
+<label>Stock Status</label>
+<div class="radio-group">
+ <label><input type="radio" name="stock" checked> In Stock</label>
+<label><input type="radio" name="stock"> Out of Stock</label> 
+</div>
+  </div>
+<div class="form-group">
+<label>Description</label>
+ <textarea placeholder="Enter product description"></textarea>
+   </div>
+ <div class="form-actions">
+<button type="submit" class="save-btn">Add / Save Product</button>
+      </div>
+    </form>
+<div class="product-list">          
+</div> 
+</div>
+</div>
+ </div>
+  </section>
+  </div>
+ 
+
 <!-- =========================
      HERO SECTION — Sudu Araliya
      ========================= -->
+     
 <section class="hero-section" id="home">
   <div class="hero-content">
     <h1 class="hero-title">AYSH<span class="accent">_LYNE</span></h1>
@@ -51,7 +131,12 @@
       </p>
     <a href="#collections" class="btn-buy">Choose By Categories</a>
   </div>
+ 
 </section>
+ <!-- ADMIN PANEL TOGGLE BUTTON -->
+<button id="adminToggleBtn" class="admin-toggle-btn">
+  <span>⚙️</span> AP
+</button> 
 <!-- =========================
      CATEGORY SECTION — Sudu Araliya
      ========================= -->
@@ -249,58 +334,71 @@
   >
     💬 Chat With Us On WhatsApp
   </a>
- 
-<!-- =========================
-     ABOUT SECTION — Sudu Araliya
+ <!-- =========================
+     ABOUT SECTION — AYSH_LYNE
      ========================= -->
 <section id="aboutus" class="about-section">
-  <div class="container">
-    <h2 class="section-title">About AYSH_LYNE</h2>
-    <p class="section-subtitle">Founded With a Passion For Quality Stationery, AYSHLYNE Has Been Serving Students, Professionals, and Creative individuals With Premium Products That inspire Productivity and Creativity.</p>
-     
-    <div class="story-card">
+  <div class="about-container">
+    <h2 class="section-title">About <span>AYSH_LYNE</span></h2>
+    <p class="section-subtitle">
+      Founded with a passion for quality stationery, <strong>AYSH_LYNE</strong> has been serving students, professionals, and creative individuals with premium products that inspire productivity and creativity.
+    </p>
 
-      <h3>Our Story</h3>
-       <strong>AYSH_LYNE</strong> Began as a Small Passion Project, Born From The Belief That Quality Stationery Can Transform How We Work, Learn,
-       and Express Ourselves. What Started as a Local Store Has Grown into a Trusted Online Destination For Stationery Enthusiasts.</p>
+    <div class="about-content">
+      <div class="about-text">
+        <h3>Our Story</h3>
+        <p>
+          <strong>AYSH_LYNE</strong> began as a small passion project, born from the belief that quality stationery can transform how we work, learn, and express ourselves. What started as a local store has grown into a trusted online destination for stationery enthusiasts across the globe.
+        </p>
 
-      <div class="mission-box">
-        <h4>Our Mission</h4>
-        <p>To Provide Exceptional Stationery Products That Empower Creativity, Enhance Productivity, and Bring Joy to Everyday Tasks Through Thoughtful Design and Premium Quality.</p>
-          </div> 
+        <div class="mission">
+          <h4>Our Mission</h4>
+          <p>
+            To provide exceptional stationery products that empower creativity, enhance productivity, and bring joy to everyday tasks through thoughtful design and premium quality.
+          </p>
+        </div>
       </div>
 
-      <div class="features-grid">
-        <div class="feature">
-          <div class="icon">🏅</div>
-          <h5>Premium Quality</h5>
-         <p>We Source Only The Finest Materials and Partner With Trusted Manufacturers.</p>
-            </div> 
+      <div class="about-image">
+        <img src="bg image.jpg" alt="AYSH_LYNE Store" />
+      </div>
+    </div>
 
-        <div class="feature">
-         <div class="icon">🔒</div>
-              <h5>Secure Shopping</h5>
-              <p>We Protect Your Personal information With industry-Standard Security.</p>
-            </div>
-
-        <div class="feature">
-          <div class="icon">🚚</div>
-          <h5>Fast Delivery</h5>
-          <p>Your favorite looks delivered quickly and safely to your doorstep.</p>
-        </div>
-
-        <div class="feature">
-          <div class="icon">💖</div>
-          <h5>Customer Care</h5>
-     <p>Your Satisfaction is Our Priority With Excellent Support and Service.</p>
+    <div class="features-grid">
+      <div class="feature">
+        <div class="icon">🏅</div>
+        <h5>Premium Quality</h5>
+        <p>We source only the finest materials and partner with trusted manufacturers.</p>
       </div>
 
-        <div class="why-choose">
-          <h3>Why Choose AYSH_LYNE?</h3>
-          <p>At AYSH_LYNE, We Believe That The Right Tools Can Make All The Difference. From The Moment You Browse Our Collection to The Day Your Order Arrives, We’re Dedicated to Providing Exceptional Service and Products You'll Love to Use Every Day.</p>
-        </div>
+      <div class="feature">
+        <div class="icon">🔒</div>
+        <h5>Secure Shopping</h5>
+        <p>Your personal information is protected with industry-standard security.</p>
+      </div>
+
+      <div class="feature">
+        <div class="icon">🚚</div>
+        <h5>Fast Delivery</h5>
+        <p>Get your favorite stationery delivered quickly and safely to your doorstep.</p>
+      </div>
+
+      <div class="feature">
+        <div class="icon">💖</div>
+        <h5>Customer Care</h5>
+        <p>We prioritize your satisfaction with friendly support and great service.</p>
+      </div>
+    </div>
+
+    <div class="why-choose">
+      <h3>Why Choose AYSH_LYNE?</h3>
+      <p>
+        At <strong>AYSH_LYNE</strong>, we believe that the right tools can make all the difference. From the moment you browse our collection to the day your order arrives, we’re dedicated to providing exceptional service and products you’ll love to use every day.
+      </p>
+    </div>
   </div>
 </section>
+
 
 <!-- =========================
      FOOTER — Sudu Araliya
@@ -324,104 +422,16 @@
       © <span id="year"></span> AYSH_LYNE — Designed & Developed with 💖
     </p>
   </div>
-  <!-- ADMIN PANEL TOGGLE BUTTON -->
-<button id="adminToggleBtn" class="admin-toggle-btn">
-  <span>⚙️</span> Admin Panel
-</button>
+ 
 </footer>
-
-  <!-- =========================
-       ADMIN PANEL SECTION
-       ========================= -->
-  <div class="admin-container">
-    <header class="admin-header">
-      <h2>🛍 Product Admin Panel</h2>
-      <button class="close-btn">Close</button>
-    </header>
-
-    <form class="product-form">
-      <div class="form-group">
-        <label>Name</label>
-        <input type="text" placeholder="Enter product name">
-      </div>
-
-      <div class="form-group">
-        <label>Discount Off (%)</label>
-        <input type="number" placeholder="0">
-      </div>
-
-      <div class="form-group">
-        <label>SKU No</label>
-        <input type="number" placeholder="Enter SKU number">
-      </div>
-
-      <div class="form-group">
-        <label>New Price (LKR)</label>
-        <input type="number" step="0.01" placeholder="0.00">
-      </div>
-
-      <div class="form-group">
-        <label>Old Price (LKR)</label>
-        <input type="number" step="0.01" placeholder="0.00">
-      </div>
-
-      <div class="form-group">
-        <label>Upload Images</label>
-        <input type="file" accept="image/*" multiple>
-      </div>
-<div class="form-group">
-   <label>Category</label> 
-   <select id="category"> 
-    <option>Notebooks</option> 
-    <option>Writing Instruments</option> 
-    <option>Color & Arts</option> 
-    <option>Paper Products</option> 
-    <option>Accessories</option> 
-  </select> 
-</div> 
-<div class="form-group"> 
-  <label>Sizes</label> 
-  <input type="text" placeholder="Enter size">
- </div>
-
- <div class="form-group">
-        <label>Colour</label>
-        <input type="text" placeholder="write the Colour">
-      </div>
-
-<div class="form-group">
-        <label>Stock Status</label>
-        <div class="radio-group">
-          <label><input type="radio" name="stock" checked> In Stock</label>
-          <label><input type="radio" name="stock"> Out of Stock</label>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label>Description</label>
-        <textarea placeholder="Enter product description"></textarea>
-      </div>
-
-      <div class="form-actions">
-        <button type="submit" class="save-btn">Add / Save Product</button>
-      </div>
-    </form>
-
-      <div class="product-list">
-          </div>
-            <div button class="edit-btn">Edit</button>
-            <button class="delete-btn">Delete</button>
-          </div>
-        </div>
-      </div>
-    </section>
-  </div>
 
 
 
 <!-- =========================
      BOTTOM NAVIGATION BAR (inline SVG icons)
      ========================= -->
+ <nav class="sticky-bottom-nav" role="navigation" aria-label="Mobile sticky navigation">
+    
 <nav class="bottom-nav" role="navigation" aria-label="Mobile bottom navigation">
   <a href="#home" class="nav-item active" aria-label="Home">
     <!-- Home SVG -->
@@ -454,6 +464,7 @@
     </svg>
     <span>Contact</span>
   </a>
+</nav>
 </nav>
 
 
