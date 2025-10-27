@@ -182,19 +182,31 @@ async function handleAdminSaveProduct(formEl){
   };
 
   try {
-    if (editingProductId) {
-      // ---- UPDATE existing product (no new row) ----
-      const { error: updErr } = await supabase.from("products").update(payload).eq("id", editingProductId);
-      if (updErr) {
-        console.warn("Update failed (RLS?),", updErr.message);
-        alert("Update attempted but may have failed due to DB permissions.");
-      } else {
-        // upload images if provided
-        if (files && files.length) await uploadFilesForProduct(editingProductId, files);
-        alert("Product updated.");
-      }
+
+if (editingProductId) {
+  // ---- UPDATE existing product (no new row) ----
+  const { error: updErr } = await supabase.from("products").update(payload).eq("id", editingProductId);
+  if (updErr) {
+    console.warn("Update failed (RLS?),", updErr.message);
+    alert("Update attempted but may have failed due to DB permissions.");
+  } else {
+    // upload images if provided
+    if (files && files.length) await uploadFilesForProduct(editingProductId, files);
+    alert("Product updated.");
+  }
+
+  editingProductId = null;
+
+  // ✅ added lines
+  await loadAndRenderProducts();
+  renderProductGrid();
+  renderAdminList();
+}
+ 
       editingProductId = null;
-    } else {
+     {
+
+   
       // ---- INSERT new product ----
       const { data: created, error: insertErr } = await supabase.from("products").insert([payload]).select().single();
       if (insertErr) {
