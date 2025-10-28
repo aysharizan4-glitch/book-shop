@@ -629,9 +629,10 @@ function openCheckoutModal(items, type="cart"){
       <div><label>Address</label><input name="address" required /></div>
       <div><label>Phone</label><input name="phone" required /></div>
       <div>
-        <label>Payment Method</label>
-        <label><input type="radio" name="pmt" value="Cash on Delivery" checked /> Cash on Delivery</label>
-        <label><input type="radio" name="pmt" value="Bank Transfer" /> Bank Transfer</label>
+        <label>Payment Method</label></div>
+       <div> 
+      <label><input type="radio" name="pmt" value="Cash on Delivery" checked /> Cash on Delivery</label> 
+        <label><input type="radio" name="pmt" value="Bank Transfer" /> Bank Transfer</label>  
       </div>
       <div style="margin-top:.5rem"><strong>Order total: ${fmtCurrency(total)}</strong></div>
       <div style="display:flex;gap:.5rem;margin-top:1rem;justify-content:flex-end;">
@@ -680,3 +681,159 @@ function ensureOutOfStockCSS(){
   st.appendChild(document.createTextNode(css));
   document.head.appendChild(st);
 }
+
+/* ===========================
+   CATEGORY CLICK → FILTER
+   Works with your existing HTML:
+   .category-card (clickable cards in category section)
+   .product-grid (the grid container)
+   Uses global `products` array already loaded by loadAndRenderProducts()
+   =========================== */
+
+(function installCategoryFilter() {
+  const catCards = Array.from(document.querySelectorAll(".category-card"));
+  const gridEl = document.querySelector(".product-grid");
+
+  // safety: nothing to do if no grid or no category cards
+  if (!gridEl || !catCards.length) return;
+
+  // helper: normalize category string
+  const norm = s => (s || "").toString().trim().toLowerCase();
+
+  // attach click listeners to each .category-card (pre-built in your HTML)
+  catCards.forEach(card => {
+    card.addEventListener("click", async (ev) => {
+      ev.preventDefault();
+
+      // remove active from all, set on clicked
+      catCards.forEach(c => c.classList.remove("active"));
+      card.classList.add("active");
+
+      // read category name from inner h3 (falls back to textContent of card)
+      const h3 = card.querySelector("h3");
+      let catName = h3 ? h3.textContent.trim() : card.textContent.trim();
+
+      // normalize some alternate labels — accept "Mixed Collection" or "Mixed"
+      const n = norm(catName);
+      const isMixed = (n === "mixed collection" || n === "mixed" || n === "all" || n === "mixed collection");
+
+      // If products not loaded yet, wait for them to load
+      if (!products || products.length === 0) {
+        // try reloading — this calls your existing loader
+        try {
+          await loadAndRenderProducts();
+        } catch (e) {
+          console.warn("Failed to load products before filtering:", e);
+        }
+      }
+
+      // perform filter
+      let filtered;
+      if (isMixed) {
+        filtered = products.slice(); // all
+      } else {
+        filtered = (products || []).filter(p => {
+          if (!p) return false;
+          // ensure category exists and compare normalized strings
+          return norm(p.category) === norm(catName);
+        });
+      }
+
+      // render filtered list to grid (use same markup style as renderProductGrid)
+      renderFilteredToGrid(filtered, gridEl);
+
+      // smooth scroll to product grid
+      gridEl.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  });
+
+  // render function reused by clicks
+  function renderFilteredToGrid(list, grid) {
+    grid.innerHTML = "";
+
+    if (!list || !list.length) {
+      grid.innerHTML = `<p style="text-align:center; color:#666; padding:30px 0;">No products found in this category.</p>`;
+      return;
+    }
+
+    list.forEach(prod => {
+      const card = document.createElement("div");
+      card.className = "product-card";
+      card.id = `storeProduct-${prod.id}`;
+
+      const isOut = !prod.in_stock;
+      if (isOut) card.classList.add("out-of-stock");
+
+      const mainImg = (prod.images && prod.images[0] && prod.images[0].url) || "placeholder.jpg";
+      const discountBadge = prod.discount_percent ? `<div class="discount-badge">${escapeHtml(String(prod.discount_percent))}% OFF</div>` : "";
+      const oldPriceHtml = (prod.compare_price !== null && prod.compare_price !== undefined) ? `<p class="old-price">${fmtCurrency(prod.compare_price)}</p>` : "";
+      const newPriceHtml = `<p class="new-price">${fmtCurrency(prod.price)}</p>`;
+
+      card.innerHTML = `
+        <div class="badge-stock">${isOut ? "Out of stock" : "In stock"}</div>
+        <img src="${mainImg}" alt="${escapeHtml(prod.name)}" class="product-img" />
+        ${discountBadge}
+        <div class="product-info">
+          <h3 class="brand">${escapeHtml(prod.brand || prod.name)}</h3>
+          <div class="price-section">
+            ${oldPriceHtml}
+            ${newPriceHtml}
+          </div>
+          <p class="desc">${escapeHtml(prod.description || "")}</p>
+        </div>
+        <button class="view-detail" data-id="${prod.id}">View Details</button>
+      `;
+      grid.appendChild(card);
+    });
+
+    // attach same view-detail listeners as original renderProductGrid
+    // use provided $$ helper with root so it finds within grid
+    $$(".view-detail", grid).forEach(btn => btn.addEventListener("click", (ev) => {
+      // dataset id could be string; convert to number if product ids are numbers
+      const rawId = ev.currentTarget.dataset.id;
+      // try to find product by id (loose compare to support string/number)
+      const prod = products.find(p => String(p.id) === String(rawId));
+      if (!prod) return alert("Product not found.");
+      showProductDetail(prod);
+    }));
+
+    // ensure out-of-stock css exists (reuse helper)
+    ensureOutOfStockCSS();
+  }
+})();
+
+// ============================
+// SUBSCRIBE FUNCTION — AYSH_LYNE
+// ============================
+
+document.querySelector(".subscribe-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const emailInput = document.querySelector(".subscribe-input");
+  const email = emailInput.value.trim();
+
+  if (!email) {
+    alert("Please enter a valid email address!");
+    return;
+  }
+
+  try {
+    // Save to Supabase
+    const { data, error } = await supabase.from("subscribers").insert([{ email }]);
+
+    if (error) {
+      if (error.message.includes("duplicate key")) {
+        alert("💌 You’ve already subscribed with this email!");
+      } else {
+        console.error("Supabase Error:", error);
+        alert("⚠️ Something went wrong. Please try again later.");
+      }
+    } else {
+      alert("🎉 Thanks for subscribing! We’ll keep you updated.");
+      e.target.reset();
+    }
+  } catch (err) {
+    console.error("Unexpected Error:", err);
+    alert("⚠️ Oops! Something went wrong.");
+  }
+});

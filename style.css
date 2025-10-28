@@ -1489,27 +1489,6 @@ body {
   border: 1px solid #ccc;
 }
 
-
-
-/* =========================
-   SUBSCRIBE FORM
-   ========================= */
-.subscribe-form {
-  display: flex;
-  gap: 0.5rem;
-  margin-top: 0.5rem;
-}
-.subscribe-input {
-  flex: 1;
-  padding: 0.5rem;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-}
-.subscribe-btn {
-   background: linear-gradient(135deg, #0078ff, #00bcd4);
-  
-}
-
 /* =========================
    RELATED PRODUCTS
    ========================= */
@@ -1545,7 +1524,7 @@ body {
 
 .bottom-nav {
   position: fixed;
-  bottom: 20px; /* your requested margin */
+  bottom: 25px; /* your requested margin */
   left: 50%;
   transform: translateX(-50%);
   width: 92%;
@@ -1649,4 +1628,109 @@ body {
   color: #fff;
   border-radius: 0 8px 25px 0;
   cursor: pointer;
+}
+
+/* ================================
+   CHECKOUT FORM — AYSH_LYNE STYLE
+================================= */
+#checkoutForm {
+  max-width: 500px;
+  margin: 30px auto;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  padding: 25px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  font-family: "Poppins", sans-serif;
+  color: #222;
+}
+
+#checkoutForm h3 {
+  text-align: center;
+  margin-bottom: 25px;
+  font-size: 1.5rem;
+  color: #333;
+  font-weight: 600;
+}
+
+#checkoutForm div {
+  margin-bottom: 18px;
+  display: flex;
+  flex-direction: column;
+}
+
+#checkoutForm label {
+  font-weight: 500;
+  margin-bottom: 6px;
+  color: #444;
+}
+
+#checkoutForm input[type="text"],
+#checkoutForm input[type="number"],
+#checkoutForm input[name="name"],
+#checkoutForm input[name="address"],
+#checkoutForm input[name="phone"] {
+  padding: 10px 12px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  font-size: 1rem;
+  outline: none;
+  transition: 0.3s ease;
+  background: rgba(255, 255, 255, 0.85);
+}
+
+#checkoutForm input:focus {
+  border-color: #0078ff;
+  box-shadow: 0 0 6px rgba(0, 120, 255, 0.3);
+}
+
+/* Payment method section */
+#checkoutForm div:nth-child(5),
+#checkoutForm div:nth-child(6) {
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 15px;
+}
+
+#checkoutForm input[type="radio"] {
+  margin-right: 6px;
+  accent-color: #0078ff;
+  transform: scale(1.1);
+}
+
+/* Submit / Button Area (Optional if you add later) */
+#checkoutForm button {
+  width: 100%;
+  background: linear-gradient(135deg, #0078ff, #00c3ff);
+  color: #fff;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+#checkoutForm button:hover {
+  background: linear-gradient(135deg, #0062d9, #00a8e8);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  #checkoutForm {
+    padding: 20px;
+  }
+
+  #checkoutForm div:nth-child(5),
+  #checkoutForm div:nth-child(6) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  #checkoutForm button {
+    font-size: 0.95rem;
+  }
 }
