@@ -1,5 +1,4 @@
-
-// script.js (UPDATED fixes: delete sync, price display in grid, edit=update, out-of-stock blur+disable)
+// script.js (FIXED: update vs insert bug, hide demo products, async-safe)
 
 // ----------------- Supabase init (keep your values) -----------------
 const SUPABASE_URL = "https://avlwpnovjkxrogrfjeuj.supabase.co";
@@ -93,6 +92,7 @@ function attachUIHandlers(){
   if (adminCloseBtn) adminCloseBtn.addEventListener("click", hideAdmin);
 
   if (productForm) {
+    // keep same behaviour as your original: caller prevents default then passes form element
     productForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       await handleAdminSaveProduct(e.target);
@@ -137,12 +137,14 @@ function attachUIHandlers(){
 
 // ----------------- Admin functions -----------------
 function showAdmin(){ if (!adminContainer) return; adminContainer.style.display="block"; renderAdminList(); }
-function hideAdmin(){ if (!adminContainer) return; adminContainer.style.display="none"; editingProductId = null; productForm.reset(); }
+function hideAdmin(){ if (!adminContainer) return; adminContainer.style.display="none"; editingProductId = null; if (productForm) productForm.reset(); }
 
 // NOTE: Because your HTML uses duplicate placeholders for new/old price,
 // we select by order: first 0.00 is "New Price", second 0.00 is "Old Price".
+// ---------- FIXED handleAdminSaveProduct ------------
+// Accepts the form element passed from submit handler
 async function handleAdminSaveProduct(formEl){
-  // gather values
+  // gather values (keeps your original selectors)
   const name = formEl.querySelector('input[placeholder="Enter product name"]').value.trim();
   const discountVal = formEl.querySelector('input[placeholder="0"]').value.trim(); // discount input
   const sku = formEl.querySelector('input[placeholder="Enter SKU number"]').value.trim();
@@ -152,7 +154,7 @@ async function handleAdminSaveProduct(formEl){
   const newPrice = priceInputs[0] ? priceInputs[0].value.trim() : "";
   const oldPrice = priceInputs[1] ? priceInputs[1].value.trim() : "";
 
-  const files = formEl.querySelector('input[type="file"]').files;
+  const files = formEl.querySelector('input[type="file"]') ? formEl.querySelector('input[type="file"]').files : null;
   const category = formEl.querySelector("#category") ? formEl.querySelector("#category").value : "";
   const sizesText = formEl.querySelector('input[placeholder="Enter size"]').value.trim();
   const coloursText = formEl.querySelector('input[placeholder="write the Colour"]').value.trim();
@@ -182,42 +184,36 @@ async function handleAdminSaveProduct(formEl){
   };
 
   try {
-
-if (editingProductId) {
-  // ---- UPDATE existing product (no new row) ----
-  const { error: updErr } = await supabase.from("products").update(payload).eq("id", editingProductId);
-  if (updErr) {
-    console.warn("Update failed (RLS?),", updErr.message);
-    alert("Update attempted but may have failed due to DB permissions.");
-  } else {
-    // upload images if provided
-    if (files && files.length) await uploadFilesForProduct(editingProductId, files);
-    alert("Product updated.");
-  }
-
-  editingProductId = null;
-
-  // ✅ added lines
-  await loadAndRenderProducts();
-  renderProductGrid();
-  renderAdminList();
-}
- 
-      editingProductId = null;
-     {
-
-   
-      // ---- INSERT new product ----
-      const { data: created, error: insertErr } = await supabase.from("products").insert([payload]).select().single();
-      if (insertErr) {
-        console.warn("Insert failed:", insertErr.message);
-        alert("Insert attempted but may have failed due to DB permissions.");
-        return;
+    // ---- UPDATE existing product (no new row) ----
+    if (editingProductId) {
+      const { error: updErr } = await supabase.from("products").update(payload).eq("id", editingProductId);
+      if (updErr) {
+        console.warn("Update failed (RLS?),", updErr.message);
+        alert("Update attempted but may have failed due to DB permissions.");
+      } else {
+        // upload images if provided
+        if (files && files.length) await uploadFilesForProduct(editingProductId, files);
+        alert("Product updated.");
       }
-      const productId = created.id;
-      if (files && files.length) await uploadFilesForProduct(productId, files);
-      alert("Product added.");
+      editingProductId = null;
+
+      // refresh UI and return to avoid running insert
+      await loadAndRenderProducts();
+      renderProductGrid();
+      renderAdminList();
+      return;
     }
+
+    // ---- INSERT new product ----
+    const { data: created, error: insertErr } = await supabase.from("products").insert([payload]).select().single();
+    if (insertErr) {
+      console.warn("Insert failed:", insertErr.message);
+      alert("Insert attempted but may have failed due to DB permissions.");
+      return;
+    }
+    const productId = created.id;
+    if (files && files.length) await uploadFilesForProduct(productId, files);
+    alert("Product added.");
 
     formEl.reset();
     await loadAndRenderProducts();
@@ -228,6 +224,7 @@ if (editingProductId) {
     alert("Unexpected error. See console.");
   }
 }
+// ----------------------------------------------------
 
 // Upload images to storage + insert product_images rows
 async function uploadFilesForProduct(productId, files){
@@ -297,7 +294,7 @@ async function renderAdminList(){
         // update local UI
         document.querySelector(`#adminProduct-${id}`)?.remove();
         // remove from products array and re-render grid
-        products = products.filter(p => p.id !== id);
+        products = products.filter(p => String(p.id) !== String(id));
         renderProductGrid();
         alert("Product deleted.");
       }
@@ -337,8 +334,12 @@ async function loadAndRenderProducts(){
       console.error("Load products error:", error);
       return;
     }
+
+    // --- Hide demo products (filter out demo:true) ---
+    const filteredProds = (prods || []).filter(p => !p.demo);
+
     // fetch images for each product
-    const enriched = await Promise.all(prods.map(async p => {
+    const enriched = await Promise.all(filteredProds.map(async p => {
       const { data: imgs } = await supabase.from("product_images").select("*").eq("product_id", p.id).order("is_main", { ascending: false });
       const mapped = (imgs || []).map(img => {
         const { data } = supabase.storage.from(STORAGE_BUCKET).getPublicUrl(img.storage_path);
@@ -398,7 +399,7 @@ function renderProductGrid(){
   // attach listeners to view-detail and also apply out-of-stock visual styles
   $$(".view-detail", productGrid).forEach(btn => btn.addEventListener("click", (ev) => {
     const id = ev.currentTarget.dataset.id;
-    const prod = products.find(p => p.id === id);
+    const prod = products.find(p => String(p.id) === String(id));
     if (!prod) return alert("Product not found.");
     showProductDetail(prod);
   }));
@@ -415,34 +416,36 @@ function showProductDetail(prod){
   mainImageIndex = 0;
   showMainImage(0);
 
-  pName.textContent = prod.name || "Product name";
-  pSku.textContent = `SKU: ${prod.sku || "-"}`;
-  pDesc.textContent = prod.description || "—";
-  pNewPrice.textContent = fmtCurrency(prod.price || 0);
-  if (prod.compare_price) {
-    pOldPrice.style.display = "block";
-    pOldPrice.textContent = fmtCurrency(prod.compare_price);
-  } else {
-    pOldPrice.style.display = "none";
+  if (pName) pName.textContent = prod.name || "Product name";
+  if (pSku) pSku.textContent = `SKU: ${prod.sku || "-"}`;
+  if (pDesc) pDesc.textContent = prod.description || "—";
+  if (pNewPrice) pNewPrice.textContent = fmtCurrency(prod.price || 0);
+  if (pOldPrice) {
+    if (prod.compare_price) {
+      pOldPrice.style.display = "block";
+      pOldPrice.textContent = fmtCurrency(prod.compare_price);
+    } else {
+      pOldPrice.style.display = "none";
+    }
   }
-  if (prod.discount_percent) {
-    pDiscount.style.display = "inline-block";
-    pDiscount.textContent = `-${prod.discount_percent}%`;
-  } else {
-    pDiscount.style.display = "none";
+  if (pDiscount) {
+    if (prod.discount_percent) {
+      pDiscount.style.display = "inline-block";
+      pDiscount.textContent = `-${prod.discount_percent}%`;
+    } else {
+      pDiscount.style.display = "none";
+    }
   }
 
   // stock UI: blur detail area and disable add/buy if out-of-stock
   if (!prod.in_stock) {
-    pStock.className = "stock out";
-    pStock.textContent = "Out of stock";
-    productPage.classList.add("out-of-stock");
+    if (pStock) { pStock.className = "stock out"; pStock.textContent = "Out of stock"; }
+    if (productPage) productPage.classList.add("out-of-stock");
     if (addCartBtn) { addCartBtn.disabled = true; addCartBtn.style.opacity = "0.5"; }
     if (buyNowBtn) { buyNowBtn.disabled = true; buyNowBtn.style.opacity = "0.5"; }
   } else {
-    pStock.className = "stock in";
-    pStock.textContent = "In stock";
-    productPage.classList.remove("out-of-stock");
+    if (pStock) { pStock.className = "stock in"; pStock.textContent = "In stock"; }
+    if (productPage) productPage.classList.remove("out-of-stock");
     if (addCartBtn) { addCartBtn.disabled = false; addCartBtn.style.opacity = ""; }
     if (buyNowBtn) { buyNowBtn.disabled = false; buyNowBtn.style.opacity = ""; }
   }
@@ -450,7 +453,7 @@ function showProductDetail(prod){
   populateSelectFromArray(sizeSelect, prod.sizes || [], "Size");
   populateSelectFromArray(colorSelect, prod.colors || [], "Colour");
   renderRelated(prod);
-  productPage.scrollIntoView({ behavior: "smooth" });
+  if (productPage) productPage.scrollIntoView({ behavior: "smooth" });
 }
 
 function populateSelectFromArray(selEl, arr, label){
@@ -478,7 +481,7 @@ function showMainImage(index){
   if (index < 0) index = currentImages.length-1;
   if (index >= currentImages.length) index = 0;
   mainImageIndex = index;
-  mainImage.src = currentImages[index].url;
+  if (mainImage) mainImage.src = currentImages[index].url;
   if (thumbs) {
     thumbs.innerHTML = "";
     currentImages.forEach((img, i) => {
@@ -510,7 +513,7 @@ function attachSwipe(el){
 function renderRelated(prod){
   if (!relatedGrid) return;
   relatedGrid.innerHTML = "";
-  const others = products.filter(p => p.id !== prod.id && p.category === prod.category).slice(0,4);
+  const others = products.filter(p => String(p.id) !== String(prod.id) && p.category === prod.category).slice(0,4);
   others.forEach(r => {
     const el = document.createElement("div");
     el.className = "related-item";
@@ -787,11 +790,8 @@ function ensureOutOfStockCSS(){
     });
 
     // attach same view-detail listeners as original renderProductGrid
-    // use provided $$ helper with root so it finds within grid
     $$(".view-detail", grid).forEach(btn => btn.addEventListener("click", (ev) => {
-      // dataset id could be string; convert to number if product ids are numbers
       const rawId = ev.currentTarget.dataset.id;
-      // try to find product by id (loose compare to support string/number)
       const prod = products.find(p => String(p.id) === String(rawId));
       if (!prod) return alert("Product not found.");
       showProductDetail(prod);
@@ -806,34 +806,77 @@ function ensureOutOfStockCSS(){
 // SUBSCRIBE FUNCTION — AYSH_LYNE
 // ============================
 
-document.querySelector(".subscribe-form").addEventListener("submit", async (e) => {
-  e.preventDefault();
+if (document.querySelector(".subscribe-form")) {
+  document.querySelector(".subscribe-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-  const emailInput = document.querySelector(".subscribe-input");
-  const email = emailInput.value.trim();
+    const emailInput = document.querySelector(".subscribe-input");
+    const email = emailInput.value.trim();
 
-  if (!email) {
-    alert("Please enter a valid email address!");
-    return;
-  }
-
-  try {
-    // Save to Supabase
-    const { data, error } = await supabase.from("subscribers").insert([{ email }]);
-
-    if (error) {
-      if (error.message.includes("duplicate key")) {
-        alert("💌 You’ve already subscribed with this email!");
-      } else {
-        console.error("Supabase Error:", error);
-        alert("⚠️ Something went wrong. Please try again later.");
-      }
-    } else {
-      alert("🎉 Thanks for subscribing! We’ll keep you updated.");
-      e.target.reset();
+    if (!email) {
+      alert("Please enter a valid email address!");
+      return;
     }
+
+    try {
+      // Save to Supabase
+      const { data, error } = await supabase.from("subscribers").insert([{ email }]);
+
+      if (error) {
+        if (error.message.includes("duplicate key")) {
+          alert("💌 You’ve already subscribed with this email!");
+        } else {
+          console.error("Supabase Error:", error);
+          alert("⚠️ Something went wrong. Please try again later.");
+        }
+      } else {
+        alert("🎉 Thanks for subscribing! We’ll keep you updated.");
+        e.target.reset();
+      }
+    } catch (err) {
+      console.error("Unexpected Error:", err);
+      alert("⚠️ Oops! Something went wrong.");
+    }
+  });
+}
+
+// ======== RELATED PRODUCTS (Sudu Araliya) =========
+async function loadRelatedProducts(currentProductId, category) {
+  try {
+    const { data, error } = await supabase
+      .from("products")
+      .select("*")
+      .eq("category", category)
+      .neq("id", currentProductId) // Exclude current product
+      .limit(4); // show 4 related items
+
+    if (error) throw error;
+
+    const relatedContainer = document.querySelector(".related-products");
+    relatedContainer.innerHTML = ""; // Clear before loading
+
+    if (!data || data.length === 0) {
+      relatedContainer.innerHTML = "<p>No related products found.</p>";
+      return;
+    }
+
+    data.forEach((product) => {
+      const card = document.createElement("div");
+      card.classList.add("related-card");
+      card.innerHTML = `
+        <img src="${product.image_url || 'noimage.jpg'}" alt="${product.name}" class="related-img" />
+        <h4>${product.name}</h4>
+        <p>${product.price ? 'Rs. ' + product.price : 'Price Unavailable'}</p>
+      `;
+
+      // Safe: use normal quotes here
+      card.addEventListener("click", () => {
+        window.location.href = "product.html?id=" + product.id;
+      });
+
+      relatedContainer.appendChild(card);
+    });
   } catch (err) {
-    console.error("Unexpected Error:", err);
-    alert("⚠️ Oops! Something went wrong.");
+    console.error("Error loading related products:", err.message);
   }
-});
+}
